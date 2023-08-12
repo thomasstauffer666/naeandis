@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Tierfreunde</title>
+<link rel="stylesheet" href="Plattform.css">
+<script src="autonav.js"></script>
+<style>
+:root {
+	--hintergrund: url('Regeln.jpg');
+}
+
+@media print {
+	body {
+		-font-size: 1rem;
+		-column-count: 2;
+	}
+}
+</style>
+<body>
+
+<main>
+
+<h1>Inhaltsverzeichnis</h1>
+
+<nav></nav>
+
+<h1>Grundlagen</h1>
+
+<h2>Eigenschaften</h2>
+
+<p>Jedes Gspänli hat ein paar Eigenschaften die es besonders gut kann. Eine Eigenschaft beschreibt nicht <strong>was</strong> was das Gspänli macht, sondern <strong>wie</strong> das Gspänli etwas macht. Sobald ein Gspänli eine Eigenschaft verwenden möchte, muss es auch eine kleine Geschichte erzählen, wie es die Eigenschaft verwendet. Es reicht nicht, nur zu erwähnen dass eine Eigenschaft verwendet werden möchte. Die Abenteuergemeinschaft entscheidet miteinander ob die kleine Geschichte stimmig ist.</p>
+
+<ul>
+	<li><em class="eigenschaft">Geheimnisvoll</em>: Das Gspänli versucht möglichst unauffällig die Herausforderung zu überwinden.</li>
+	<li><em class="eigenschaft">Geschickt</em>: Das Gspänli versucht die Herausforderung auf elegante Art zu lösen. Das können flinke Finger sein, sich durch einen engen Spalt durchzwängen oder schnell von Fels zu Fels klettern.</li>
+	<li><em class="eigenschaft">Mutig</em>: Das Gspänli nimmt all seinen Mut zusammen und geht aufs Ganze.</li>
+	<li><em class="eigenschaft">Schlau</em>: Das Gspänli strengt seinen Kopf an. Es hat eine aussergewöhnliche Idee. Vielleicht rechnet es sogar etwas aus oder schreibt etwas auf.</li>
+	<li><em class="eigenschaft">Sorgfältig</em>: Das Gspänli nimmt sich Zeit und übereilt nichts.</li>
+	<li><em class="eigenschaft">Spielerisch</em>: Das Gspänli versucht etwas auf unterhaltsame Weise zu machen.</li>
+	<li><em class="eigenschaft">Stark</em>: Das Gspänli verwendet alle seine Kraft um die Herausforderung zu bewältigen.</li>
+</ul>
+
+<p class="beispiel">Beispiel: Thalia Streifenpfote das Tiger-Mädchen und Pavel Schimmerschuppe der Python-Junge möchten gerne auf einen hohen Baum klettern um herauszufinden wo sie genau sind. Thalia hat als Merkmale <em class="eigenschaft">Stark</em> und <em class="eigenschaft">Mutig</em>, Pavel hat als Merkmale <em class="eigenschaft">Schlau</em> und <em class="eigenschaft">Geheimnisvoll</em>. Thalia lässt ihre Krallen aus den Pfoten und versucht sich mit aller Kraft am Baumstamm hoch zu ziehen. Thalia das Tiger-Mädchen verwendet die Eigenschaft <em class="eigenschaft">Stark</em>. Pavel überlegt eine Weile, und schlängelt sich dann von Ast zu Ast. Pavel der Python-Junge verwendet die Eigenschaft <em class="eigenschaft">Schlau</em>. Thalia und Pavel können beide auf den Baum klettern, verwenden aber unterschiedliche Eigenschaften.</p>
+
+<h2>Probe</h2>
+
+<p>Wann immer ein Gspänli etwas machen möchte was alltäglich ist dann darf das Gspänli das ohne weiteres machen. Sobald ein Gspänli eine Herausforderung bewältigen möchte, die nicht alltäglich ist, dann muss das Gspänli eine Probe machen. Um eine Probe zu machen, kommen mehrere Würfel zum Einsatz (oder Münzen)</p>
+
+<ul>
+	<li>1 Würfel umsonst, sobald eine Probe gemacht wird.</li>
+	<li>1 Würfel, wenn eine Eigenschaft passend ist. Siehe <a href="#Eigenschaften">Eigenschaften</a>.</li>
+	<li>1 Würfel, wenn einen Freundschaftsstein verwendet wird. Siehe <a href="#Freundschaftssteine">Freundschaftssteine</a>.</li>
+	<li>1 Würfel, wenn eine persönliche Ausrüstung verwendet wird, die passend zur Probe ist. Siehe <a href="#Ausrüstung">Ausrüstung</a>.</li>
+</ul>
+
+<p>Für eine einzelne Probe kann maximal 1 Eigenschaft, 1 Ausrüstung und 1 Freundschaftsstein verwendet werden.</p>
+
+<p>Für jede 4, 5 oder 6, die mit einem 6er-Würfel gewürfelt werden, gibt es 1 Erfolg. Anstatt einen Würfel kann auch eine Münze verwendet werden. Wenn nach dem Wurf der Kopf der Münze sichtbar ist, ist dies ein Erfolg.</p>
+
+<ul>
+	<li><span class="erfolge-0">0 Erfolge</span>: Aktion misslingt, und etwas hinderliches passiert</li>
+	<li><span class="erfolge-1">1 Erfolge</span>: Aktion gelingt, aber etwas hinderliches passiert</li>
+	<li><span class="erfolge-2">2 Erfolge</span>: Aktion gelingt</li>
+	<li><span class="erfolge-3">3 Erfolge</span>: Aktion gelingt, und etwas hilfreiches passiert</li>
+</ul>
+
+<p class="beispiel">Beispiel: Amara Glitzerfeder, die Kakadu-Frau, ist in einer schwierigen Lage. Amara hängt gerade kopfüber an einem Seil und hält sich mit ihren Krallen am Seil fest. ??? Unfertig</p>
+
+<!-- ??? Beispiel Unfertig -->
+
+<!-- ??? beschreib was passieren könnte wenn ewtwa unerwartetes/tolles passiert -->
+
+<h3>Tipps</h3>
+
+<p>Eine Probe sollte nur dann gemacht werden, wenn etwas hilfreiches <em>und</em> etwas hinderliches passieren kann. Wenn bei einer Herausforderung nur etwas hilfreiches oder nur etwas hinderliches passieren kann, aber nichts dazwischen, dann am Besten nicht würfeln, sondern das entsprechende Resultat gleich ausspielen.</p>
+
+<p>Sind alle Proben immer gleich schwer? Ist das klettern auf einen Baum gleich schwer wie das erklettern eines sehr hohen Turms? Die Schwierigkeit kann indirekt bestimmt werden, über die Anzahl der Proben. Das Klettern auf den Baum wird wahrscheinlich nur 1 Probe erfordern. Das erklettern eines hohen Turmes könnte aber aus 3, unterschiedlichen Proben bestehen, die aber alle interessant sein sollten und zu unterschiedlichen Resultaten führen könnten. Bei einem Wurf besteht immer die Chance auf ein kleines Missgeschick. Je öfter gewürfelt wird, desto öfter besteht daher auch die Chance für ein Missgeschick.</p>
+
+<!--
+Es ist maximal möglich 4 Erfolge zu haben. Selbst wenn es durch anderweitige Regeln möglich wäre dass du mehr als 4 Würfel hast (z.B. wenn du eine Eigenschaft verbessert hast), dann werden maximal 4 Erfolge gezählt. ??? weglassen, ansprechen??? verändert dass das spiel zu fest
+
+Erweiterung ??? Nachdem das Gspänli erklärt hat was sein Tier gerne machen möchte, entscheidet sich Gemeinsam oder die Spielleitung wie die gegenwärtige Situation ist. Am meisten wird es sich um eine Risikoreiche Situation handeln.
+-->
+
+<h3>Erste Spielrunde</h3>
+
+<p>Jedes Gspänli hat 2 Eigenschaften.</p>
+
+<h2>Freundschaftssteine</h2>
+
+<p>??? zweck, pool</p>
+
+<p>Am besten verwendet ein paar Gegenstände verwenden, die eindeutig als Freundschaftssteine erkennbar sind und keine anderweitige Verwendung haben (besser keine Esswaren, Würfel oder Münzen). Das können Glasperlen sein, Steine von Draussen, oder einfach ein paar Papierschnipsel.</p>
+
+<h3>Wie Bekommen</h3>
+
+<p>Während dem Spiel gibt es Freundschaftssteine, für Alle die etwas gutes für andere Lebewesen tun. Ein Tier retten, etwas für andere kochen, mit anderen spielen, auf etwas aufpassen, ...</p>
+
+<p class="beispiel">
+Beispiel: Sari Nachthuf die Wildschwein-Bache möchte mit ihrer Abenteuergemeinschaft heute noch den nächsten Ort erreichen, bevor die Sonne untergeht. Am anderen Flussufer entdeckt sie zufällig Farid Sumpfhuf den Hausschwein-Eber, der ganz alleine am Graben zu sein scheint. Sari denkt darüber nach, warum Farid ganz alleine ist. Sie muss ihre Abenteuergemeinschaft überzeugen, nass zu werden und über den Fluss zu schwimmen. Sie findet dort heraus, dass wegen der Trockenheit in der letzten Tagen, Farid einen neuen Sumpf für Körperpflege für sich und andere Tiere machen möchte. Sari und ihre Abenteuergemeinschaft bieten Farid ihre Hilfe an. Farid nimmt die Hilfe dankend an. Sari wird dafür einen Freundschaftstein bekommen, weil sie unaufgefordert, ohne Mühen zu scheuen, auf Farid zugegangen ist und ihm unaufdringlich ihre Hilfe angeboten hat.
+</p>
+
+<h3>Wie Ausgeben</h3>
+
+<p>Sobald einen Freundschaftsstein verwendet wird, muss er abgeben werden. Folgendes kann mit einem Freundschaftsstein gemacht machen.</p>
+
+<ul>
+	<li>Probe: Bei einer Probe einen zusätzlichen Würfel oder eine zusätzliche Münze bekommen.</li>
+	<li>Rückblick: Etwas erfinden was in der Vergangenheit passiert ist.</li>
+	<li>Schenken: Den Freundschaftsstein einem anderen Tier schenken.</li>
+</ul>
+
+<h3>Erste Spielrunde</h3>
+
+<p>Jedes Gspänli bekommt bekommt bei der ersten Spielrunde einen Freundschaftsstein, wenn es eine der folgenden Frage beantwortet:</p>
+
+<ul>
+	<li>Erzähle eine kleine Geschichte, was du mit einem anderen Gspänli am Tisch schönes in der Vergangenheit erlebt hast.</li>
+</ul>
+
+<h2>Ausdauer</h2>
+
+<p>???</p>
+
+<ul>
+	<li>Wenn ein Tier eine Nacht durchschlafen kann, bekommt es 3 Ausdauer zurück.</li>
+	<li>Eine Mahlzeit und mindestens 10 Minuten Ruhe bringt 1 Ausdauer zurück. Pro Tag kann ein Tier nicht mehr als 3 Mahlzeiten zu sich nehmen.</li>
+</ul>
+
+<h3>Erste Spielrunde</h3>
+
+<p>3 Ausdauer.</p>
+
+<h2>Ausrüstung</h2>
+
+<!--
+Ganz allgemeine Beschreibung und eine unvollständige Liste als Beispiel.
+Was gibt es in dieser Welt? Dinge aus Pflanzen, Holz, ...
+-->
+
+<p>Gegenstände, Bücher, Zauber, ... es gibt unterschiedlichste Ausrüstung die einerseits Proben vereinfachen können, manchmal aber zwingend notwendig ist, um etwas überhaupt machen zu können. Ein Seil kann z.B. hilfreich sein beim klettern, ist aber beim erklettern eines Baumes nicht zwingend notwendig. Ohne Ausrüstung, ist es aber kaum möglich ein Feuer aus dem Nichts zu machen.</p>
+
+<p>Die Verwendung von Ausrüstung kostet immer 1 Ausdauer.</p>
+
+<p>Folgende Liste ist nicht abschliessend, es sind nur ein paar Beispiele:</p>
+
+<ul>
+	<li>Ewige Fackel: Feuer entzünden, Orientierung Dunkelheit, Kochen</li>
+	<li>Instrument (Flöte, Geige, Harfe, Horn, ...): Unterhaltung, Nachrichten Übermitteln</li>
+	<li>Seil: Klettern, Zusammenbinden</li>
+	<li>Endlose Willenskraft</li>
+	<li>Flug-Zauber</li>
+</ul>
+
+<p>Ein Gspänli kann maximal 3 Ausrüstungen dabei haben.</p>
+
+<h3>Erste Spielrunde</h3>
+
+<p>0</p>
+
+<p>??? muss ein kleines Abenteuer sein</p>
+
+<h1>Weiterführendes</h1>
+
+<p>Folgende Kapitel sind nur lesenswert, falls das Erzählspiel schon ein oder zweimal gespielt wurde.</p>
+
+<h2>Erfahrung</h2>
+
+<p>Wenn du ein Abenteuer bestanden hast, bekommst du 1 Erfahrung. Diese Erfahrung kannst du wie folgt eintauschen:</p>
+
+<ul>
+	<li>1 Erfahrung = +1 Maximale Ausdauer</li>
+	<li>1 Erfahrung = 1 Zusätzliches Ausrüstung</li>
+	<li>3 Erfahrung = 1 Zusätzliche Eigenschaft</li>
+	<li>3 Erfahrung = 1 Eigenschaft um +1 Erhöhen</li>
+</ul>
+
+<p class="beispiel">Beispiel: Ximena Schneeschweif die Stute, hat mit ihren Gspänli schon 4 Abenteuer erlebt, aber bis jetzt keinen Erfahrung ausgegeben. Ihre 4 Erfahrung verwendet Ximena um ihre Eigenschaft <em class="eigenschaft">Geschickt</em> von 1 auf 2 zu erhöhen. Sie hat damit noch 1 Erfahrung übrig und tauscht diesen für 1 Ausdauer. Ximena erhöht ihre Ausdauer nun von 3 auf 4. Ximena ist damit schneller geworden und hat auch mehr Ausdauer.</p>
+
+<h2>Tipps & Tricks</h2>
+
+<p>Die folgende Gedanken tönen im ersten Moment vielleicht etwas trivial. Zu Allem würde sich aber einiges schreiben lassen. Sie sind wichtiger als vieles andere.</p>
+
+<p>Für die Spielleitung:</p>
+
+<ul>
+	<li>Liebt alle Gspänli und auch die Person hinter dem Gspänli.</li>
+	<li>Denkt an die Konsequenzen.</li>
+	<li>Immer eine Mischung aus Bekanntem und Fantasie.</li>
+	<li>Nicht zu viel vorbereiten.</li>
+	<li>Erfindet keine übermächtigen Tiere.</li>
+</ul>
+
+<p>Für die Gspänli:</p>
+
+<ul>
+	<li>Helft einander.</li>
+	<li>Baut auf die Idee von Anderen auf.</li>
+	<li>Unterstützt die Spielleitung.</li>
+	<li>Spiele aus der Sicht deines Gspänli.</li>
+</ul>
+
+<h2>Altersunterschiede</h2>
+
+<p>Das Spiel wurde mehrfach an öffentlichen Spielmessen Angeboten. Ein paar Erfahrungen haben sich daraus ergeben:</p>
+<ul>
+	<li>Kurze Abenteuer sind besser als lange.</li>
+	<li>Es wird Kinder geben die lassen sich begeistern und diese möchten dann gerne noch ein weiteres Abenteuer erleben. Idealerweise daher 2 Abenteuer vorbereiten.</li>
+	<li>Nicht lange erklären. Das Spiel hat sehr wenige Regeln, die kann man auch während dem Spiel gut erklären. Besser einfach mit einem Abenteuer beginnen.</li>
+	<li>Gegeben durch die Regeln sind die Gspänli alle gleich fähig. Es ist unmöglich einen besseren oder schwächeren Charakter zu erstellen. Am besten mit dem Bauch entscheiden.</li>
+</ul>
+
+<table>
+	<tr><td>Alter</td><td>4 - 5</td><td>6 - 8</td><td>9+</td></tr>
+	<tr><td>Abenteuer Länge</td><td>&lt; 30 Minuten</td><td>&lt; 60 Minuten</td><td>&lt; 90 Minuten</td></tr>
+	<tr><td>Freundschaftssteine Verwenden</td><td>✓</td><td>✓</td><td>✓</td></tr>
+	<tr><td>Ausdauer Verwenden</td><td>✗</td><td>✓</td><td>✓</td></tr>
+	<tr><td>Erfahrung Verwenden</td><td>✗</td><td>✗</td><td>✓</td></tr>
+	<tr><td>Ausrüstung Einsetzen</td><td>✗</td><td>✓</td><td>✓</td></tr>
+	<tr><td>Begleitung Erwachsene</td><td>✓</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+</table>
+
+<h2>Wahrscheinlichkeiten</h2>
+
+<p>Die folgende Tabelle gibt an, wie wahrscheinlich es ist dass eine Mindestanzahl von Erfolgen erreicht wird. Diese Tabelle ist für das Spiel nicht wichtig, aber es kann der Spielleitung unter Umständen einen Anhaltspunkt geben.</p>
+
+<!--
+anydice.com
+
+output 1d{0..1}
+output 2d{0..1}
+output 3d{0..1}
+output 4d{0..1}
+output 5d{0..1}
+-->
+
+<table>
+	<tr><td>Würfel</td><td class="erfolge-1">1 Erfolg</td><td class="erfolge-2">2 Erfolge</td><td class="erfolge-3">3 Erfolge</td><td class="erfolge-3">4 Erfolge</td></tr>
+	<tr><td>1</td><td>50%</td><td>-</td><td>-</td><td>-</td></tr>
+	<tr><td>2</td><td>75%</td><td>25%</td><td>-</td><td>-</td></tr>
+	<tr><td>3</td><td>88%</td><td>50%</td><td>13%</td><td>-</td></tr>
+	<tr><td>4</td><td>94%</td><td>69%</td><td>31%</td><td>6%</td></tr>
+	<tr><td>5</td><td>97%</td><td>81%</td><td>50%</td><td>19%</td></tr>
+</table>
+
+<p class="beispiel">Quinn Regenbogenhuf der Pferde-Hengst, möchte gerne 2 Erfolge haben. Wenn Quinn 4 Würfel verwenden würde, wäre die Wahrscheinlichkeit ungefähr 69%. Anders ausgedrückt: In ca. 2 von 3 Versuchen (2 von 3 = 66%), wo Quinn jedes mal 4 Würfel wirft, hätte Quinn dann wirklich 2 Erfolge.</p>
+
+</main>
+
+</body>
+</html>
