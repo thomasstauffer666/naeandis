@@ -1,5 +1,5 @@
 
-# Næandis
+# Naeandis
 
 - [Einleitung](Einleitung.html)
 - [Regeln](Regeln.html)
