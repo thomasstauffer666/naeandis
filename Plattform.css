@@ -104,6 +104,14 @@ em {
 	padding: 0.5rem;
 }
 
+.rede:before {
+	content: "«";
+}
+
+.rede:after {
+	content: "»";
+}
+
 .herausforderung {
 	border-radius: 0.5rem;
 	color: #363;
