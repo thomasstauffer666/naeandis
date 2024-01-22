@@ -5,20 +5,77 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="Plattform.css">
 <title>Naeandis - Inspiration</title>
-<script>
+<style>
+
+#ausgabe {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	justify-items: stretch;
+}
+
+svg {
+	xwidth: 10em;
+}
+
+</style>
+<script type="module">
+
+function limit(value, min, max) {
+	if (value < min) {
+		return min;
+	} else if (value > max) {
+		return max;
+	} else {
+		return value;
+	}
+}
+
+async function main() {
+	const response = await fetch('Icons.svg');
+	const textSVG = await response.text();
+
+	const nodeBody = document.createElement('body');
+	nodeBody.innerHTML = textSVG;
+	const nodeSVG = nodeBody.children[0];
+
+	function wurf() {
+		const anzahl = parseInt(document.getElementById('anzahl').value);
+		const html = (new Array(anzahl)).fill(0).map($ => {
+			const index = Math.floor(Math.random() * nodeSVG.children.length);
+			return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' + nodeSVG.children[index].outerHTML + '</svg>';
+		}).join('');
+		document.getElementById('ausgabe').innerHTML = html;
+	}
+
+	document.getElementById('wurf').addEventListener('click', wurf);
+	wurf();
+}
+
+document.addEventListener('DOMContentLoaded', main);
 
 </script>
 <body>
 
 <main>
 
-<p>Die folgenden Karten basieren auf den <a href="https://game-icons.net">game-icons</a>.</p>
+<h1>Inspiration</h1>
 
-<!-- move to this website, make a collection of e.g. 6*9*n symbols -->
+<div class="hilfreich">
 
-<p>
-<a href="https://thomasstauffer.gitlab.io/garden/randomstory">Inspirations-Karten</a>
-</p>
+<p>Inspirations-Karten können beliebig interpretiert werden. Sie sind ein Hilfsmittel damit um euch auf neue Idee zu bringen.</p>
+
+<select id="anzahl">
+	<option value="1">1 Karte</option>
+	<option value="3" selected>3 Karten</option>
+	<option value="6">6 Karten</option>
+	<option value="9">9 Karten</option>
+</select>
+<button id="wurf">Würfeln 🎲</button>
+<div id="ausgabe"></div>
+
+<p>Die Karten sind ausgewählte Grafiken aus den <a href="https://game-icons.net">game-icons</a>.</p>
+
+</div>
 
 </main>
 

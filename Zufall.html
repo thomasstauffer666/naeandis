@@ -9,44 +9,120 @@
 :root {
 }
 </style>
+<script type="module">
+
+function main() {
+	function w(seiten) {
+		return Math.floor(Math.random() * seiten) + 1;
+	}
+
+	function w6() {
+		const anzahl = parseInt(document.getElementById('anzahl-w6').value);
+		const wurf = new Array(anzahl).fill().map($ => w(6));
+		const erfolge = wurf.reduce((acc, $) => acc + ($ > 3 ? 1 : 0), 0);
+		document.getElementById('resultat-w6').innerText = wurf.join(', ') + ' ➭ ' + erfolge + ' ' + (erfolge == 1 ? 'Erfolg' : 'Erfolge');
+	}
+
+	function w10() {
+		const wurf = w(10);
+		document.getElementById('resultat-w10').innerText = wurf + ' ➭ ' + ((wurf % 10) * 10) + '%';
+	}
+
+	function w100() {
+		const wurf = [w(10), w(10)];
+		document.getElementById('resultat-w100').innerText = wurf.join(', ') + ' ➭ ' + ((wurf[0] % 10) * 10 + (wurf[1] % 10)) + '%';
+	}
+
+	document.getElementById('wurf-w6').addEventListener('click', w6);
+	document.getElementById('wurf-w10').addEventListener('click', w10);
+	document.getElementById('wurf-w100').addEventListener('click', w100);
+	w6();
+	w10();
+	w100();
+}
+
+document.addEventListener('DOMContentLoaded', main);
+
+</script>
 <body>
 
 <main>
 
 <h1>Zufall</h1>
+	
+<div class="wichtig">
 
-<p>Es kann hilfreich sein, wenn manchmal die Würfel entscheiden. Eine möglichst einfache Ja/Nein Frage stellen und entscheiden wie viel Erfolge es braucht damit, je nach Frage, die Antwort ein Nein oder Ja sein kann. Die Anzahl Würfel und Anzahl Erfolge entscheiden alle miteinander.</p>
+<p>Es kann hilfreich sein, wenn manchmal die Würfel entscheiden. Stellt euch dazu eine möglichst einfache Ja/Nein Frage stellen und entscheidet wie viel Erfolge es braucht damit, je nach Frage, die Antwort ein Nein oder Ja sein kann. Die Anzahl Würfel und die Mindestanzahl Erfolge entscheidet ihr immer alle miteinander.</p>
 
 <table>
-	<tr><td>Wahrscheinlichkeit</td><td>Anzahl Würfel</td><td>Anzahl Erfolge</td></tr>
-	<tr><td>94%</td><td>4 Würfel</td><td>1 Erfolg</td></tr>
-	<tr><td>88%</td><td>3 Würfel</td><td>1 Erfolg</td</tr>
-	<tr><td>75%</td><td>2 Würfel</td><td>1 Erfolg</td></tr>
-	<tr><td>50%</td><td>1 Würfel</td><td>1 Erfolg</td></tr>
-	<tr><td>25%</td><td>2 Würfel</td><td>2 Erfolge</td></tr>
-	<tr><td>13%</td><td>3 Würfel</td><td>3 Erfolge</td></tr>
-	<tr><td>4%</td><td>4 Würfel</td><td>4 Erfolge</td></tr>
+	<tr><td>Wahrscheinlichkeit</td><td>Anzahl Würfel</td><td>Mindestanzahl Erfolge</td><td>Beschreibung</td></tr>
+	<tr><td>94%</td><td>4 Würfel</td><td>1 Erfolg</td><td>fast immer</td></tr>
+	<tr><td>88%</td><td>3 Würfel</td><td>1 Erfolg</td><td>sehr wahrscheinlich</td></tr>
+	<tr><td>75%</td><td>2 Würfel</td><td>1 Erfolg</td><td>eher wahrscheinlich</td></tr>
+	<tr><td>50%</td><td>1 Würfel</td><td>1 Erfolg</td><td>halbe-halbe</td></tr>
+	<tr><td>25%</td><td>2 Würfel</td><td>2 Erfolge</td><td>eher unwahrscheinlich</td></tr>
+	<tr><td>13%</td><td>3 Würfel</td><td>3 Erfolge</td><td>sehr unwahrscheinlich</td></tr>
+	<tr><td>6%</td><td>4 Würfel</td><td>4 Erfolge</td><td>fast nie</td></tr>
 </table>
 
 <p>Die Wahrscheinlichkeiten sind identisch mit denen aus den <a href="Regeln.html#Wahrscheinlichkeiten">Regeln</a>.</p>
 
-<!--
+<div>
+	<select id="anzahl-w6">
+		<option value="1">Ein 6er Würfel (1W6)</option>
+		<option value="2">Zwei 6er Würfel (2W6)</option>
+		<option value="3">Drei 6er Würfel (3W6)</option>
+		<option value="4">Vier 6er Würfel (4W6)</option>
+	</select>
+	<button id="wurf-w6">Würfeln 🎲</button>
+	<span id="resultat-w6">-</span>
+</div>
 
+<!--
 <p>Allein mit dieser kleinen Idee kann ...</p>
 -->
 
-<h2>Beispiele</h2>
+<h3>Beispiele</h3>
 
 <ul>
-	<li>Es ist fast schon Winter. Hat es auf dem Baum noch ein paar Äpfel welche die Abenteuergemeinschaft pflücken könnte? ➭ Eher unwahrscheinlich ➭ 4 Würfel, 4 Erfolge ➭ 6%</li>
-	<li>Es ist Herbst. Gibt es ein paar essbare Eicheln auf dem Boden? ➭ Eher wahrscheinlich ➭ 2 Würfel, 1 Erfolg ➭ 75%</li>
+	<li>Es schneit seid mehreren Tagen, alle eure Ohren und Pfoten sind eiskalt und ihr seid müde und erschöpft. Endlich seht ihr alle einen Apfelbaum. Wäre es nicht toll wenn dieser vielleicht noch ein paar Äpfel tragen würde? ➭ Eher unwahrscheinlich ➭ 4 Würfel, 4 Erfolge ➭ 6%. Wenn ihr mit 4 Würfeln würfelt und 4 Erfolge habt, dann hat es tatsächlich noch den einen oder anderen Apfel am Baum. Der mag zwar auch gefroren sein, aber das ist besser als gar nichts.</li>
+	<li>Es ist Herbst. Drei Gspänli aus eurer Abenteuergruppen wollen ein paar essbare Eicheln suchen. Wird sich so etwas finden lassen? ➭ Eher wahrscheinlich ➭ 2 Würfel, 1 Erfolg ➭ 75%. Ihr würfelt mit zwei Würfeln und wenn ihr ein Erfolg habt, dann findet ihr einige Eicheln und könnte euch damit ein Abendessen zubereiten.</li>
 </ul>
 
-<h2>10-er Würfel</h2>
+</div>
 
-<p>Falls man anstatt 6-er Würfel oder Münzen auch noch andere Würfel hat, dann lässt sich das auch etwas einfacher (aber nicht besser) mit einem oder zwei 10-er Würfel machen.</p>
+<div class="hilfreich">
+
+<!-- löschen? -->
+
+<h2>Zusätzliche Ideen</h2>
+
+<p>Alle der folgenden Erklärungen sind nur zusätzliche Gedanken. Die Grundidee oben, ist in sich komplett. Lest daher nur weiter, wenn ihr obige Idee schon mehrmals ausprobiert habt.</p>
+
+<h3>Prozent mit 10er Würfel</h3>
+
+<p>Falls ihr anstatt 6-er Würfel oder Münzen noch andere Würfel hat, dann lässt sich das auch mit einem oder zwei 10-er Würfel machen. Der Vorteil ist, dass ihr keine Tabelle braucht um nachzuschauen wie viele Würfel und Erfolge zu welcher Wahrscheinlichkeit führen. Meistens sollte das aber ohnehin nicht so wichtig sein. Im Speziellen für Kinder ist diese Methode auch nicht einfacher. Wenn eine 10 gewürfelt wird, müsst ihr diese als 0 interpretieren.</p>
+
+<p>Mit einem 10er Würfel kann mit in 10% Schritten die Wahrscheinlichkeit bestimmen.</p>
+
+<div>
+	<button id="wurf-w10">Ein 10er Würfel (1W10) 🎲</button>
+	<span id="resultat-w10">-</span>
+</div>
+
+<p>Mit zwei 10er Würfeln in 1% Schritten, dazu haben idealerweise die zwei 10-er Würfel unterschiedliche Farben. Eine Würfel ist für die erste Stelle der Zahl zuständig, der andere Würfel für die zweite Stelle. Im ersten Moment mag das für die eine oder andere Person realistischer Aussehen wenn man 2 Würfel nimmt, den Spielspass wird es aber selten erhöhen.</p>
+
+<div>
+	<button id="wurf-w100">Zwei 10er Würfel (1W100) 🎲</button>
+	<span id="resultat-w100">-</span>
+</div>
 
 <!-- ??? tabelle beispiel -->
+<!--
+<h2>Symmetrie</h2>
+-->
+
+</div>
 
 </main>
 
