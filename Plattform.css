@@ -23,7 +23,8 @@ body {
 	}
 }
 
-button {
+button,
+select {
 	font-size: 1.4rem;
 	padding: 1rem 2rem;
 }
@@ -54,6 +55,22 @@ img {
 
 em {
 	font-weight: 600;
+}
+
+nav {
+	font-size: 1rem;
+	background-color: #ffec;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	top: 6rem;
+	left: 1rem;
+}
+
+@media screen and (min-width: 100rem) {
+	nav {
+		position: fixed;
+		width: 15rem;
+	}
 }
 
 .erfolge-0 {
@@ -104,6 +121,14 @@ em {
 	padding: 0.5rem;
 }
 
+.rede:before {
+	content: "«";
+}
+
+.rede:after {
+	content: "»";
+}
+
 .herausforderung {
 	border-radius: 0.5rem;
 	color: #363;
@@ -125,6 +150,30 @@ em {
 	padding: 0.5rem;
 }
 
-.abenteuer > h2:nth-of-type(n+2) {
+.abenteuer>h2:nth-of-type(n+2) {
 	page-break-before: always;
+}
+
+/* hilfreich -> optional, noch ein prefix dass es eine art lesehinweis ist */
+
+.wichtig {
+	border-left: 0.2rem solid #30f9;
+	padding-left: 1rem;
+}
+
+.hilfreich {
+	border-left: 0.2rem solid #fa09;
+	padding-left: 1rem;
+}
+
+@media print {
+	.wichtig {
+		border-left: 0;
+		padding-left: 0;
+	}
+
+	.hilfreich {
+		border-left: 0;
+		padding-left: 0;
+	}
 }

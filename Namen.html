@@ -15,7 +15,7 @@
 }
 
 </style>
-<script>
+<script type="module">
 
 function choose(array) {
 	const index = Math.floor(Math.random() * array.length);
@@ -23,7 +23,7 @@ function choose(array) {
 }
 
 function load(id) {
-		return document.getElementById(id).textContent.split(',').map($ => $.trim());
+	return document.getElementById(id).textContent.split(',').map($ => $.trim());
 }
 
 function main() {
@@ -52,34 +52,37 @@ document.addEventListener('DOMContentLoaded', main);
 
 <main>
 
-<h1>Beispiele</h1>
+<h1>Namen</h1>
 
-<p>Die folgenden Beispiele bestehen jeweils aus einem Vornamen, einen oder mehreren Vorsilben und einer Nachsilbe.</p>
+<div class="hilfreich">
 
-<ul>
-	<li>Zayd Nebellichtherz</li>
-	<li>Omar Regenbogenschweif</li>
-	<li>Noelle Sonnenpfote</li>
-	<li>Amara Sternenflügel</li>
-</ul>
+<h2>Beispiele</h2>
+
+<p>Die folgenden Beispiele bestehen jeweils aus einem Vornamen, einen oder mehreren Vorsilben und einer Nachsilbe. Natürlich dürft ihr auch diese Namen selber noch auseinandernehmen und anders wieder zusammensetzen:</p>
+
+<!--
+Zayd Nebellichtherz, Omar Regenbogenschweif, Noelle Sonnenpfote, Amara Sternenflügel
+-->
 
 <button id="generieren">Würfeln 🎲</button>
 
-<p id="namen"></div>
+<p id="namen"></p>
 
-<h1>Vornamen</h1>
+<h2>Vornamen</h2>
 
 <p class="small" id="vornamen">Zoya, Zoltan, Zoe, Zlatan, Zephyr, Zen, Zeina, Zayd, Zainab, Zain, Zahra, Zacharias, Yusuf, Yuri, Yuki, Yeong, Yelena, Yasmina, Yasin, Yannick, Yanis, Yael, Xzavier, Xuan, Xiomara, Xin, Ximun, Ximena, Xiao, Xia, Xi, Xenia, Xavion, Xavier, Xara, Wynn, Wren, Wolfgang, Winnie, Willem, Willa, Widad, West, Wesley, Wendy, Wei, Walter, Wai, Vivian, Violeta, Vinnie, Vincenzo, Vincent, Vinay, Viktor, Vikram, Vijay, Vienna, Vidya, Victoria, Vesper, Vera, Vega, Vasili, Valentina, Uzair, Uyen, Utku, Usman, Ursula, Uri, Urban, Una, Umber, Umar, Umama, Ulysses, Ulrich, Ulani, Ula, Udo, Uday, Ubaida, Tyler, Tristan, Tobias, Thea, Thalia, Tessa, Tatum, Tatiana, Tariq, Tara, Tao, Tamara, Talia, Tahir, Sun, Storm, Stella, Stefan, Sonia, Sofia, Skylar, Sinan, Simon, Sergio, Selma, Selene, Sebastian, Sari, Sara, Samuel, Samir, Samantha, Sam, Sabrina, Ruby, Rowan, Rose, Rory, Robert, River, Rio, Riley, Ricardo, Rhea, Rene, Ren, Rebecca, Raul, Raquel, Rafael, Rachel, Rabia, Quirin, Quinlan, Quincy, Quentin, Quang, Qiara, Qiana, Qamar, Priya, Princess, Pranav, Poppy, Poe, Pierre, Phoenix, Phoebe, Philip, Peyton, Petra, Perla, Penelope, Pedro, Paz, Paula, Patrick, Paola, Owen, Oscar, Orlando, Orla, Ori, Onyx, Omar, Olivier, Olivia, Olive, Olga, Oleg, Octavia, Ocean, Nora, Noelle, Nisha, Nina, Nikita, Nihal, Nico, Nick, Neo, Nehemiah, Natalie, Naomi, Nala, Nadia, Murat, Muhammad, Morgan, Mohammed, Miriam, Mila, Miguel, Michael, Micah, Melissa, Maya, Mateo, Marwa, Marcus, Malik, Madison, Madeline, Luna, Luis, Lucas, Lorenzo, Loren, Logan, Linden, Lina, Lily, Lila, Liam, Levi, Leonardo, Leon, Lena, Leila, Lee, Larissa, Kofi, Kiran, Kian, Khaled, Kenzo, Kelly, Keegan, Kazuki, Kayla, Karl, Karim, Kamila, Kai, Juniper, Julia, Juan, Joss, Joshua, Josephine, Jordan, Jocelyn, Joanna, Jihan, Jessica, Jesse, Javier, Jasmine, Jael, Jade, Izzy, Ivy, Ivan, Isra, Ismail, Ishita, Isabella, Isaac, Irina, Ingrid, Ingram, Infinity, Ines, Indigo, Inari, Imran, Imani, Ilias, Ignacio, Idris, Ibrahim, Ian, Hiroshi, Henriette, Helena, Hector, Hazel, Hassan, Hannah, Gustavo, Gunnar, Grace, Gloria, Giselle, Giovanni, Gilbert, George, Gemma, Garnet, Gale, Gabriele, Gabriel, Frost, Freya, Freddie, Frank, Flora, Fleur, Fiona, Finley, Fernando, Felix, Faye, Fatima, Farid, Faiz, Faith, Fable, Fabio, Ezra, Evan, Ethan, Esther, Esra, Esmeralda, Eric, Emmanuel, Emma, Emilia, Ella, Elisha, Elijah, Elias, Eliana, Eli, Elena, Eden, Dylan, Dominic, Dmitri, Diego, Diana, Dennis, David, Darius, Darijo, Danielle, Dana, Damian, Dallas, Dalia, Dakota, Daisy, Dahlia, Corey, Cleo, Clara, Claire, Christopher, Christian, Chris, Chloe, Chiara, Chai, Celeste, Cedric, Catalina, Carmen, Caleb, Caius, Caitlin, Blaine, Bilal, Bianca, Benjamin, Bella, Beatrix, Barbara, Baht, Bahadir, Aviva, Asa, Arjun, Aria, Anya, Anika, Andrei, Amari, Alexander, Alex, Akira, Aisha, Aiko, Aidan, Ahmed, Aditi</p>
 
-<h1>Nachnamen</h1>
+<h3>Nachnamen</h3>
 
-<h2>Vorsilbe</h2>
+<h4>Vorsilbe</h4>
 
-<p class="small" id="nachnamen-vorsilbe">Wolken, Wind, Wald, Tanz, Tag, Stein, Sonnen, Silber, Schnee, Regenbogen, Regen, Nebel, Nacht, Mond, Licht, Kupfer, Kristall, Glitzer, Glanz, Funken, Flammen, Feuer, Erden, Erd, Eisen, Eis, Donner, Blüten, Blitz, Blatt, Berg, Baum</p>
+<p class="small" id="nachnamen-vorsilbe">Wolken, Wind, Wald, Tropfen, Tau, Tanz, Tag, Sturm, Stein, Sonnen, Silber, Schnee, Sand, Regenbogen, Regen, Purpur, Perlmutt, Opal, Nebel, Nacht, Moos, Mond, Licht, Lavendel, Kupfer, Kristall, Himmel, Glitzer, Glanz, Funken, Flammen, Feuer, Farn, Erden, Erd, Elfenbein, Eisen, Eis, Dämmerungs, Donner, Blüten, Blitz, Blatt, Bernstein, Berg, Baum</p>
 
-<h2>Nachsilbe</h2>
+<h4>Nachsilbe</h4>
 
-<p class="small" id="nachnamen-nachsilbe">Zahn, Stacheln, Stachel, Schwanz, Schuppe, Schnauze, Pranke, Pfote, Pelz, Ohr, Krallen, Kralle, Klaue, Huf, Herz, Flügel, Auge</p>
+<p class="small" id="nachnamen-nachsilbe">Zunge, Zahn, Stosszahn, Stacheln, Stachel, Schwimmhaut, Schweif, Schwanz, Schuppe, Schnauze, Rüssel, Pranke, Pfote, Pelz, Panzer, Ohr, Nase, Nabel, Muschel, Mund, Lippe, Krallen, Kralle, Klaue, Kieme, Huf, Herz, Fühler, Flügel, Fluke, Flosse, Bart, Auge, Antenne</p>
+
+</div>
 
 </main>
 
