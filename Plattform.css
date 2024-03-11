@@ -143,6 +143,10 @@ nav {
 	left: 1rem;
 }
 
+nav ul {
+	padding-left: 1rem;
+}
+
 @media screen and (min-width: 100rem) {
 	nav {
 		position: fixed;
