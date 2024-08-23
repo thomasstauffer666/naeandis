@@ -7,12 +7,8 @@
 <style>
 
 :root {
-  --color: hsl(0, 100%, 30%);
-  --bg: url('bg04.jpg');
-  --color: hsl(40, 100%, 30%);
-  --bg: url('bg11.jpg');
   --color: hsl(280, 100%, 30%);
-  --bg: url('bg10.jpg');
+  --bg: url('bg00.webp');
 }
 
 * {
@@ -132,11 +128,11 @@ img {
 function main() {
 	const params = new URLSearchParams(window.location.search);
 	const tier = params.get('Tier');
-	const portraitBild = 'GspänliPortrait/' + (tier  || 'Blank') + '.jpg';
+	const portraitBild = 'GspänliPortrait/' + (tier  || 'Blank') + '.webp';
 	console.log(portraitBild)
 
 	const nummer = Math.floor(Math.random() * 11);
-	const hintergrundBild = 'GspänliHintergrund/' + nummer.toString().padStart(2, '0') + '.jpg';
+	const hintergrundBild = 'GspänliHintergrund/' + nummer.toString().padStart(2, '0') + '.webp';
 
 	document.getElementById('portrait').src = portraitBild;
 	document.getElementById('tier').value = tier;
