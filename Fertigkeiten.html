@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="Plattform.css">
+<script src="header.js"></script>
+<title>Naeandis Fertigkeiten</title></li>
+<style>
+:root {
+}
+
+img {
+	width: 6rem;
+	border-radius: 0.5rem;
+}
+
+.kategorie {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.5rem;
+}
+
+h2 {
+	-break-before: always;
+}
+
+@media print {
+	.kategorie div {
+		padding: 0.5rem;
+		border: 0.2rem solid #363;
+		border-radius: 1rem;
+	}
+}
+</style>
+<body>
+
+<header></header>
+
+<main>
+
+<h1>Fertigkeiten</h1>
+
+<h2>Tiere</h2>
+
+<p>Jedes Gspänli hat die Karte mit den Fertigkeiten die zu seinem Tier passen. Normalerweise hat jedes Tier nur 1 Tierfertigkeit. Mit einem langwierigen Ritual kannst du die Fertigkeiten von einem anderen Tier dazu gewinnen.</p>
+<p>Deine Tier Fertigkeiten kosten keine Ausdauer.</p>
+
+<div class="kategorie">
+
+<div>
+	<h3>Bär</h3>
+	<img src="GspänliPortrait/Bär.webp">
+	<ul>
+		<li><em class="fertigkeit">Riechen</em>: Du nutzt deinen Geruchssinn. Etwas zu Essen finden. Ein anderes Tier finden.</li>
+		<li><em class="fertigkeit">Schwimmen</em>: Du bewegst dich auch im Wasser sehr gewandt.</li>
+		<li><em class="fertigkeit">Tatze</em>: Du setzt nutzt deine Bärentatze. Etwas schweres zu bewegen. Dich hochzuziehen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Ente</h3>
+	<img src="GspänliPortrait/Ente.webp">
+	<ul>
+		<li><em class="fertigkeit">Fliegen</em>: Du nutzt deine Federn zum Fliegen.</li>
+		<li><em class="fertigkeit">Gründeln</em>: Du bist am Grundeln in einem Gewässer, dort kannst du Essen finden oder einen hilfreichen Gegenstand.</li>
+		<li><em class="fertigkeit">Kälteschutz</em>: Deine Federn dienen zum Schutz vor Kälte. Auch deinen Füssen kann Kälte nichts anhaben.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Eule</h3>
+	<img src="GspänliPortrait/Eule.webp">
+	<ul>
+		<li><em class="fertigkeit">Tarnung</em>: Dein Gefieder bietet dir eine ausgezeichnete Tarnung in deinem Lebensraum. Du kannst damit auch geräuschlos fliegen.</li>
+		<li><em class="fertigkeit">Rundumsicht</em>: Dein Kopf kann fast vollständig gedreht werden, sodass du alles rund um dich herum sehen kannst.</li>
+		<li><em class="fertigkeit">Ohren</em>: Du hörst auch eine Maus unter dem Schnee.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Frosch</h3>
+	<img src="GspänliPortrait/Frosch.webp">
+	<ul>
+		<li><em class="fertigkeit">Unterwasser</em>: Du kannst sowohl an Land als auch unter Wasser atmen.</li>
+		<li><em class="fertigkeit">Kleben</em>: Du kannst damit weit entferne Gegenstände zu dir holen.</li>
+		<li><em class="fertigkeit">Musizieren</em>: Du nutzt dein quaken zum musizieren und kannst auch andere damit erfreuen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Fuchs</h3>
+	<img src="GspänliPortrait/Fuchs.webp">
+	<ul>
+		<li><em class="fertigkeit">Nachtsehen</em>: Du siehst in der Nacht aussergewöhnlich gut.</li>
+		<li><em class="fertigkeit">Orientieren</em>: Du spürst Magnetfelder und kannst dich damit gut orientieren.</li>
+		<li><em class="fertigkeit">Nachmachen</em>: Du kannst die Geräusche machen und auch solche von anderen Tieren nachahmen.</li>
+		<!-- Magnetfelder, 40 Laute, Nachtsehen, Balance Schwanz -->
+	</ul>
+</div>
+
+<div>
+	<h3>Hase</h3>
+	<img src="GspänliPortrait/Hase.webp">
+	<ul>
+		<li><em class="fertigkeit">Aufmerksamkeit</em>: Du kannst selbst ein bisschen ausruhen auch wenn du noch wach bist.</li>
+		<li><em class="fertigkeit">Rundumsicht</em>: Du kannst mit deinen Augen alles rund um dich herum entdecken.</li>
+		<li><em class="fertigkeit">Hoppeln</em>: Du kannst viele aufeinanderfolgende Sprünge machen und so auch ziemlich hoch und weit kommen.</li>
+		<!-- 360 Sicht/Rundumsehen, Koprophagie, Wach Schlafen< -->
+	</ul>
+</div>
+
+<div>
+	<h3>Luchs</h3>
+	<img src="GspänliPortrait/Luchs.webp">
+	<ul>
+		<li><em class="fertigkeit">Hören</em>: Du hörst sehr genau was rund um dich und auch weiter weg passiert.</li>
+		<li><em class="fertigkeit">Springen</em>: Du hast eine starke Sprungkraft und kannst weite Distanzen überwinden.</li>
+		<li><em class="fertigkeit">Schleichen</em>: Mit deinen grossen flauschigen Pfoten kannst du leise schleichen.</li>
+		<!-- Schleichen, Sprung, Haarpinsel -> Gutes Gehör, Grosse Pfoten -> Sehr Leise -->
+	</ul>
+</div>
+
+<div>
+	<h3>Schildkröte</h3>
+	<img src="GspänliPortrait/Schildkröte.webp">
+	<ul>
+		<li><em class="fertigkeit">Erinnern</em>: Du weisst ganz vieles. Du hast irgendwann schon einmal davon gelesen.</li>
+		<li><em class="fertigkeit">Schützen</em>: Du verwendest deinen Panzer als Schutz. Du kannst dich und andere gegen Gefahren schützen.</li>
+		<li><em class="fertigkeit">Tauchen</em>: Du kannst unter Wasser etwas machen (max. 1 Stunde) oder sogar unter Wasser schlafen (max. 6 Stunden).</li>
+		<!-- Panzer, Weise/Langes Leben, Schwimmen, Tragen, Kein Zahnschmelz -->
+	</ul>
+</div>
+
+<div>
+	<h3>Wolf</h3>
+	<img src="GspänliPortrait/Wolf.webp">
+	<ul>
+		<li><em class="fertigkeit">Heulen</em>: In der Nacht kannst du heulen. Vielleicht hören dich andere Tiere.</li>
+		<li><em class="fertigkeit">Mitgefühl</em>: Du kannst es ganz gut mit anderen zusammen. Wenn du anderen hilfst, gelingt dir besonders gut.</li>
+		<li><em class="fertigkeit">Ausdauer</em>: Du hast eine grosse Ausdauer und kannst lange Strecken ohne Ermüdung laufen.</li>
+		<!-- Riechen, Freunde Rufen, Sozialstruktur, Fairness, Kooperation, Heulen, Weit Gehen -->
+	</ul>
+</div>
+
+<div>
+	<h3>Waschbär</h3>
+	<img src="GspänliPortrait/Waschbär.webp">
+	<ul>
+		<li><em class="fertigkeit">Werkzeug-Pfoten</em>: Du kannst mit deinen Pfoten auch komplizierte Sachen öffnen.</li>
+		<li><em class="fertigkeit">Maske</em>: Du bist gut darin dich zu verkleiden.</li>
+		<li><em class="fertigkeit">Klettern</em>: Du kannst schnell Bäume rauf unter runter klettern.</li>
+	</ul>
+</div>
+
+<!--
+Adler
+<h3>Adler</h3>
+<ul>
+	<li><em class="fertigkeit">Fliegen</em>: Du kannst fliegen.</li>
+	<li><em class="fertigkeit">Scharfe Sicht</em>: Du siehst ungewöhnlich gut. Du kannst Gegenstände oder Tiere schon von weit her sehen.</li>
+	<li><em class="fertigkeit">Scharfe Krallen</em>: Deine Krallen sind ungewöhnlich scharf, du kannst damit auch harte Dinge öffnen oder sie zum schneiden verwenden.</li>
+</ul>
+-->
+
+</div>
+
+<h2>Bewachende</h2>
+
+<p>Wenn du dich entscheidest eine Bewachendes Gspänli zu sein, dann bedeutet dass das du dass, dass du dich in Zukunft für etwas stark machst und dich dafür einsetzt. Bist du z.B. ein Baum-Bewachendes Gspänli, verpflichtest du dich für Bäume da zu sein. Wenn deine anderen Gspänli nach einer Spielrunden zusammen entscheiden dass du deiner Rolle nicht gerecht wirst, kann es auch passieren dass du deine Fertigkeit wieder verlierst.</p>
+<p>Deine Bewachende Fertigkeit zu Nutzen kostet immer 1 Ausdauer.</p>
+
+<div class="kategorie">
+
+<div>
+	<h3>Wasser-Bewachende</h3>
+	<img src="Fertigkeiten/Wasser-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Wolke</em>: Wenn du eine Wolke am Himmel siehst, kannst du mit ihr ins Gespräch kommen.</li>
+		<li><em class="fertigkeit">Wasser Formen</em>: Du kannst auch grössere Wassermassen von einem zum anderen Orte bewegen und dabei das Wasser in verschiedenste Formen bringen.</li>
+		<li><em class="fertigkeit">Wasser Reinigen</em>: Du kannst Schmutz aus Wasser entfernen. Es kann danach ohne Probleme getrunken werden aber auch zum waschen verwendet werden.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Baum-Bewachende</h3>
+	<img src="Fertigkeiten/Baum-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Wachsen</em>: Du kannst Bäume aber auch andere Lebewesen wachsen lassen.</li>
+		<li><em class="fertigkeit">Formen</em>: Die Äste der Bäume in deiner Umgebung kannst du nach deiner Vorstellung Formen.</li>
+		<li><em class="fertigkeit">Früchtereste</em>: Bäume geben dir auch im Winter noch Reste von ihren Früchten. Bucheckern, Eicheln, Lindenblüten, Walnüsse, Haselnüsse, ...</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Stein-Bewachende</h3>
+	<img src="Fertigkeiten/Stein-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Stapeln</em>: Du kannst Steine zu hohen Türmen stapeln.</li>
+		<li><em class="fertigkeit">Schleifen & Mahlen</em>: Du kannst Steine dazu verwenden um andere Dinge zu mahlen oder zu schleifen.</li>
+		<li><em class="fertigkeit">Beruhigend</em>: Du legst dir oder einem deiner Gspänli einen rundlichen, warmen Stein in die Pfote.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Luft-Bewachende</h3>
+	<img src="Fertigkeiten/Luft-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Schweben</em>: Du kannst dich, aber auch Freunde in die Luft heben.</li>
+		<li><em class="fertigkeit">Wind</em>: Du kannst dem Wind eine Frage stellen.</li>
+		<li><em class="fertigkeit">Gerüche</em>: Du kannst Gerüche von weit her erkennen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Blumen-Bewachende</h3>
+	<img src="Fertigkeiten/Blumen-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Wachsen</em>: Du kannst Blumen und andere Lebewesen wachsen lassen.</li>
+		<li><em class="fertigkeit">Duft</em>: Du kannst mit beliebigen Düften anderen eine Freude bereiten.</li>
+		<li><em class="fertigkeit">Nektar</em>: Kann Nahrung für andere Tiere sein, aber auch du kannst daraus z.B. Sirup für deine Gspänli machen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Wetter-Bewachende</h3>
+	<img src="Fertigkeiten/Wetter-Bewachende.webp">
+	<ul>
+		<li><em class="fertigkeit">Wolken Gespräch</em>: Falls eine Wolke am Himmel ist kannst du mit ihr reden.</li>
+		<li><em class="fertigkeit">Sonnen Strahlen</em>: Die Sonne kann dir helfen ihre Strahlen dorthin zu lenken wo du gerne möchtest.</li>
+		<li><em class="fertigkeit">Schnee</em>: Eignet sich wunderbar für eine Rutschbahn.</li>
+	</ul>
+	</div>
+</div>
+
+<!--
+
+<div>
+	<h3>Eis-Bewachende</h3>
+	<ul>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Stern-Bewachende</h3>
+	<ul>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Feen-Bewachende</h3>
+	<ul>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+		<li em class="">?</li>: ?</li>
+	</ul>
+</div>
+
+-->
+
+</div>
+
+<h2>Gegenstände</h2>
+
+<p>Um den Gegenstand zu Nutzen, musst du ihn berühren können.</p>
+<p>Einen Gegenstand zu Nutzen kostet immer 1 Ausdauer.</p>
+
+<div class="kategorie">
+
+<div>
+	<h3>Zelt</h3>
+	<img src="Fertigkeiten/Zelt.webp">
+	<ul>
+		<li><em class="fertigkeit">Schutz</em>: Schutz vor allen möglichen Naturgewalten.</li>
+		<li><em class="fertigkeit">Verpflegung</em>: Essen und Tränke zubereiten.</li>
+		<li><em class="fertigkeit">Ruhen</em>: Die ganze Gruppe nimmt kurz Ruhe und kann etwas Ausdauer regenerieren.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Leiter</h3>
+	<img src="Fertigkeiten/Leiter.webp">
+	<ul>
+		<li><em class="fertigkeit">Himmel</em>: Du kannst mit der Leiter in ungeahnte Höhen hoch klettern.</li>
+		<li><em class="fertigkeit">Überqueren</em>: Du kannst die Leiter verwenden um Schluchten zu überwinden.</li>
+		<li><em class="fertigkeit">Helfen</em>: Deine Leiter ist oft hilfreich um anderen Lebewesen zu helfen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Becher</h3>
+	<img src="Fertigkeiten/Becher.webp">
+	<ul>
+		<li><em class="fertigkeit">Trink-Wasser</em>: Du kannst deinen Durst mit einem Becher voll Wasser löschen.</li>
+		<li><em class="fertigkeit">Würfel</em>: Mit den Würfeln in deinem Becher kannst du mit anderen Spiele spielen.</li>
+		<li><em class="fertigkeit">Heilen</em>: Du kannst Verletzungen oder Krankheiten von Lebewesen lindern.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Amphore</h3>
+	<img src="Fertigkeiten/Amphore.webp">
+	<ul>
+		<li><em class="fertigkeit">Wirkliches Bedürfnis</em>: Wenn du oder ein anderes Lebewesen in die Amphore schaust erkennst du was dir wirklich wichtig ist.</li>
+		<li><em class="fertigkeit">Portal</em>: Du und deine Freunde können in andere Welten gehen.</li>
+		<li><em class="fertigkeit">Beeren</em>: In deinem Krug hat es genügend Beeren für eine Mahlzeit für ein Gspänli.</li>
+	</ul>
+</div>
+
+</div>
+
+<h2>Zauber</h2>
+
+<p>Ein Zauber ist immer an ein Gegenstand gebunden. Dass kann ein Zauberstab, ein Amulett, ein Ring und vieles mehr sein. Das ist eine Entscheidung.</p>
+<p>Einen Zauber zu Nutzen kostet immer 1 Ausdauer.</p>
+
+<div class="kategorie">
+
+<div>
+	<h3>Ewiges Licht</h3>
+	<img src="Fertigkeiten/Ewiges-Licht.webp">
+	<ul>
+		<li><em class="fertigkeit">Farbe</em>: Du kannst einen Raum mit einer beliegen Farbe zum leuchten bringen. Er leuchtet auch noch einen ganz Tag weiter, nachdem du nicht mehr dort bist.</li>
+		<li><em class="fertigkeit">Licht</em>: Wenn andere euch suchen, werden sie euer Licht sehen und können euch finden.</li>
+		<li><em class="fertigkeit">Wachsen</em>: Das Licht hilft Pflanzen und vielleicht auch anderen Dingen schneller zu wachsen als normal.</li>
+	</ul>
+</div>
+
+</div>
+
+</main>
+
+<!--
+Ideen Rollenspieltage 2024
+
+Zeitring
+Illusion
+Geister
+Gravitation
+Zufallsstab
+Stärken <-> Schwächen
+Sprache Neu <-> Vergesen
+Konfettihammer
+Graubartmaske
+Musikkanone
+-->
+
+<!--
+Template
+
+<h3></h3>
+
+<ul>
+	<li></li>
+	<li></li>
+	<li></li>
+</ul>
+-->
+
+</body>
+</html>

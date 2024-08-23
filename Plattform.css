@@ -143,6 +143,10 @@ nav {
 	left: 1rem;
 }
 
+nav ul {
+	padding-left: 1rem;
+}
+
 @media screen and (min-width: 100rem) {
 	nav {
 		position: fixed;
@@ -174,7 +178,7 @@ nav {
 	padding: 0 0.3rem;
 }
 
-.eigenschaft {
+.fertigkeit {
 	color: #363;
 	background-color: #cfc;
 	border-radius: 0.3rem;
@@ -202,7 +206,7 @@ nav {
 }
 
 .rede:before {
-	content: "🦜 «";
+	content: "💬 «";
 }
 
 .rede:after {
@@ -245,7 +249,7 @@ nav {
 /* hilfreich -> optional, noch ein prefix dass es eine art lesehinweis ist */
 
 .wichtig {
-	border-left: 0.2rem solid #30f9;
+	border-left: 0.2rem solid #6a09;
 	padding-left: 1rem;
 }
 

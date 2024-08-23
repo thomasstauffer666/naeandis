@@ -10,6 +10,7 @@ function autoheader() {
 		['Zufall', 'Zufall.html'],
 		['Inspiration', 'Inspiration.html'],
 		['Projekt', 'Projekt.html'],
+		['Fertigkeiten', 'Fertigkeiten.html'],
 		['Gspänli Bogen', 'Gspänli.html'],
 	];
 
@@ -23,6 +24,9 @@ function autoheader() {
 	a.href = 'index.html';
 	const img = document.createElement('img');
 	img.src = 'Logo.svg';
+	img.width = 100;
+	img.height = 70;
+	img.alt = 'Logo';
 	a.appendChild(img);
 	divLeft.appendChild(a);
 
