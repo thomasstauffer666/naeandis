@@ -1,0 +1,4 @@
+# package-lock.json intentionally added
+*.bak
+node_modules
+package-lock.json

@@ -6,7 +6,6 @@ function autoheader() {
 		['Regeln', 'Regeln.html'],
 		['Zusammenfassung Regeln', 'Regeln-Zusammenfassung.html'],
 		['Abenteuer', 'Abenteuer.html'],
-		['Namen', 'Namen.html'],
 		['Zufall', 'Zufall.html'],
 		['Inspiration', 'Inspiration.html'],
 		['Projekt', 'Projekt.html'],
