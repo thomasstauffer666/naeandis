@@ -46,12 +46,16 @@ main.inner {
 	background-repeat: no-repeat;
 	display: grid;
 	gap: 2rem;
-	grid-template-columns: auto 16rem;
+	grid-template-columns: auto 14rem;
 }
 
 @media print {
 	@page {
 		margin: 0;
+	}
+
+	body {
+		width: 100%;
 	}
 }
 
@@ -105,10 +109,6 @@ input[type=checkbox].⚡️:checked::after {
 	content: '⚡️';
 }
 
-input[type=checkbox].❤️:checked::after {
-	content: '❤️';
-}
-
 input[type=checkbox].💡:checked::after {
 	content: '💡';
 }
@@ -125,26 +125,8 @@ input[type=checkbox].💡:checked::after {
 	gap: 0.5rem;
 }
 
-.layout-v-end {
+.layout-end {
 	align-items: flex-end;
-}
-
-.layout-g2 {
-	display: grid;
-	grid-template-columns: auto 3rem;
-	gap: 0.5rem;
-}
-
-.layout-g4 {
-	display: grid;
-	grid-template-columns: auto 3rem 3rem 3rem;
-	gap: 0.5rem;
-	align-items: center;
-	justify-items: center;
-}
-
-.layout-g4 *:nth-child(4n+1) {
-	margin-right: auto;
 }
 
 img {
@@ -219,8 +201,11 @@ document.addEventListener('DOMContentLoaded', main);
 	</div>
 
 	<div class="layout-v">
-		<strong>Ausdauer ⚡️ / Maximale Ausdauer</strong>
+		<strong>Maximale Ausdauer ⚡️</strong>
 		<div class="layout-h">
+			<input type="checkbox" class="⚡️">
+			<input type="checkbox" class="⚡️">
+			<input type="checkbox" class="⚡️">
 			<input type="checkbox" class="⚡️">
 			<input type="checkbox" class="⚡️">
 			<input type="checkbox" class="⚡️">
@@ -231,18 +216,18 @@ document.addEventListener('DOMContentLoaded', main);
 	</div>
 </div>
 
-<div class="layout-v">
-	<strong>Freundschaftssteine ❤️</strong>
-	<div class="layout-g2">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
-		<input type="text"><input type="checkbox" class="❤️">
+<div class="layout-v layout-end">
+	<strong>Ausdauer ⚡️</strong>
+	<div class="layout-v">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
+		<input type="checkbox" class="⚡️">
 	</div>
 </div>
 

@@ -95,6 +95,11 @@ h3 {
 	color: var(--farbe-hell);
 }
 
+h4 {
+	margin: 0;
+	color: var(--farbe-hell);
+}
+
 button,
 select {
 	font-size: 1.4rem;
@@ -151,6 +156,8 @@ nav ul {
 	nav {
 		position: fixed;
 		width: 15rem;
+		overflow-y: auto;
+		max-height: calc(100vh - 6rem - 1rem);
 	}
 }
 
@@ -176,6 +183,10 @@ nav ul {
 	background-color: #99f;
 	border-radius: 0.3rem;
 	padding: 0 0.3rem;
+}
+
+.liste {
+	font-size: 70%;
 }
 
 .fertigkeit {
@@ -236,6 +247,18 @@ nav ul {
 }
 
 .aktion {
+	border-radius: 0.5rem;
+	color: #e90;
+	background-color: #fec;
+	padding: 0.5rem;
+}
+
+.tipp:before {
+	content: '💡 ';
+}
+
+.tipp {
+	font-style: italic;
 	border-radius: 0.5rem;
 	color: #e90;
 	background-color: #fec;

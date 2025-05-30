@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="Plattform.css">
 <script src="header.js"></script>
+<script src="autonav.js"></script>
 <title>Naeandis - Inspiration</title>
 <style>
 	:root {
@@ -11,30 +12,113 @@
 </style>
 <style>
 
-#ausgabe {
+.karten-ausgabe {
+	max-width: 80vh;
+	margin: 0 auto;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	justify-items: stretch;
 }
 
-svg {
-	xwidth: 10em;
+.tabellen-ausgabe {
+	font-style: italic;
 }
 
 </style>
 <script type="module">
 
-function limit(value, min, max) {
-	if (value < min) {
-		return min;
-	} else if (value > max) {
-		return max;
-	} else {
-		return value;
-	}
+function range(n) {
+	return [...Array(n).keys()];
 }
 
-async function main() {
+function choose(array) {
+	const index = Math.floor(Math.random() * array.length);
+	return array[index];
+}
+
+function randomWeighted(items, weights) {
+	const sum = weights.reduce((a, b) => a + b, 0);
+	const random = Math.random() * sum;
+	let cumulative = 0;
+	return items.find((_, i) => (cumulative += weights[i]) >= random);
+};
+
+function mainTabellen() {
+	const tabellen = {};
+
+	// Nach Zufall von einer oder mehreren Tabellen auswählen
+	function t(...keys) {
+		return choose([].concat(...keys.map($ => tabellen[$])));
+	}
+
+	document.querySelectorAll('[data-table]').forEach(element => {
+		const key = element.dataset.table;
+		const value = element.textContent.split(',').map($ => $.trim()).filter($ => $.length > 0);
+		tabellen[key] = value;
+	});
+
+	function nameGenerieren() {
+		const nachnameVorsilbe = randomWeighted([
+			'',
+			t('name-nachnamen-vorsilbe').toLowerCase()
+		], [10, 3]);
+		return t('name-vornamen') + ' ' + t('name-nachnamen-vorsilbe') + nachnameVorsilbe + t('name-nachnamen-nachsilbe').toLowerCase();
+	}
+
+	function farbeGenerieren() {
+		return randomWeighted([
+			t('farbe'),
+			t('farbe') + '-' + t('farbe'),
+			t('farbe') + '-' + t('farbe') + '-' + t('farbe'),
+		], [10, 3, 1]);
+	}
+
+	function abenteuerGenerieren() {
+		const ort = t('ort-nomen', 'gebaeude') + ' ' + t('ort-adjektiv');
+		const schluesslfigur = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit') + ', ' + t('aussehen');
+		const aufgabe = t('ziel-nomen') + ' ' + t('ziel-verb');
+		const begleitung1 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
+		const begleitung2 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
+		const gegenstand = t('gegenstand', 'instrument');
+		const herausforderung1 = t('herausforderung');
+		const hilfe = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
+		const herausforderung2 = t('herausforderung');
+		const ende = t('ende');
+		const abenteuer = `Ort: ${ort}\nSchlüsselfigur: ${schluesslfigur}\nAufgabe: ${aufgabe}\nBegleitung 1: ${begleitung1}\nBegleitung 2: ${begleitung2}\nGegenstand: ${gegenstand}\nErste Herausforderung: ${herausforderung1}\nUnerwartete Hilfe: ${hilfe}\nZweite Herausforderung: ${herausforderung2}\nEnde: ${ende}`;
+		return abenteuer;
+	}
+
+	const generatoren = {
+		'name': [5, nameGenerieren],
+		'ziel': [5, () => t('ziel-nomen') + ' ' + t('ziel-verb')],
+		'tier': [5, () => t('tier')],
+		'ort': [5, () => t('ort-nomen') + ' ' + t('ort-adjektiv')],
+		'ende': [5, () => t('ende')],
+		'gebaeude': [5, () => t('gebaeude')],
+		'sinn': [5, () => t('sinn')],
+		'aktion': [5, () => t('aktion')],
+		'gegenstand': [5, () => t('gegenstand')],
+		'instrument': [5, () => t('instrument')],
+		'persoenlichkeit': [5, () => t('persoenlichkeit')],
+		'aussehen': [5, () => t('aussehen')],
+		'herausforderung': [5, () => t('herausforderung')],
+		'essen': [5, () => t('essen')],
+		'getraenk': [5, () => t('getraenk')],
+		'farbe': [5, () => farbeGenerieren()],
+		'abenteuer': [1, abenteuerGenerieren],
+	};
+
+	Object.entries(generatoren).forEach(([name, [repeat, entryCallable]]) => {
+		function generate() {
+			const result = range(repeat).map($ => entryCallable()).join(', ');
+			document.getElementById(name + '-ausgabe').innerText = result;
+		}
+		document.getElementById(name + '-generieren').addEventListener('click', generate);
+		generate();
+	});
+}
+
+async function mainKarten() {
 	const response = await fetch('Icons.svg');
 	const textSVG = await response.text();
 
@@ -43,19 +127,20 @@ async function main() {
 	const nodeSVG = nodeBody.children[0];
 
 	function wurf() {
-		const anzahl = parseInt(document.getElementById('anzahl').value);
+		const anzahl = parseInt(document.getElementById('karten-anzahl').value);
 		const html = (new Array(anzahl)).fill(0).map($ => {
 			const index = Math.floor(Math.random() * nodeSVG.children.length);
 			return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">' + nodeSVG.children[index].outerHTML + '</svg>';
 		}).join('');
-		document.getElementById('ausgabe').innerHTML = html;
+		document.getElementById('karten-ausgabe').innerHTML = html;
 	}
 
-	document.getElementById('wurf').addEventListener('click', wurf);
+	document.getElementById('karten-wurf').addEventListener('click', wurf);
 	wurf();
 }
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener('DOMContentLoaded', mainTabellen);
+document.addEventListener('DOMContentLoaded', mainKarten);
 
 </script>
 </head><body>
@@ -66,18 +151,1791 @@ document.addEventListener('DOMContentLoaded', main);
 
 <h1>Inspiration</h1>
 
+<nav></nav>
+
 <div class="hilfreich">
 
-<p>Inspirations-Karten können beliebig interpretiert werden. Es gibt kein richtig oder falsch. Sie sind ein Hilfsmittel um euch auf neue Idee zu bringen.</p>
+<h2>Karten</h2>
 
-<select id="anzahl">
+<p>Die Karten können beliebig interpretiert werden. Es gibt kein richtig oder falsch. Sie sind ein Hilfsmittel um euch auf neue Idee zu bringen.</p>
+
+<ul>
+	<li>Leuchtturm, Steuerrad, Tür: Ein Leuchtturm zeigt mit seinem Licht einem Schiff den Weg zu einer verschlossenen Tür.</li>
+	<li>Bienenstock, Liebe, Treppe: Ein Hase baut eine Wendeltreppe rund um einen Baum um den Bienenstock seiner Bienenfreunde an einen wärmeren Ort zu bringen.</li>
+</ul>
+
+<select id="karten-anzahl">
 	<option value="1">1 Karte</option>
 	<option value="3" selected="selected">3 Karten</option>
 	<option value="6">6 Karten</option>
 	<option value="9">9 Karten</option>
 </select>
-<button id="wurf">Würfeln 🎲</button>
-<div id="ausgabe"></div>
+<button id="karten-wurf">Würfeln 🎲</button>
+<div id="karten-ausgabe" class="karten-ausgabe"></div>
+
+<h2>Namen</h2>
+
+<p>Die folgenden Namen bestehen jeweils aus einem Vornamen, einen oder mehreren Vorsilben und einer Nachsilbe. Natürlich dürft ihr auch diese Namen selber noch auseinandernehmen und anders wieder zusammensetzen:</p>
+
+<!--
+Zayd Nebellichtherz, Omar Regenbogenschweif, Noelle Sonnenpfote, Amara Sternenflügel
+-->
+
+<button id="name-generieren">Würfeln 🎲</button>
+
+<p id="name-ausgabe" class="tabellen-ausgabe"></p>
+
+<h3>Vornamen</h3>
+
+<p class="liste" data-table="name-vornamen">
+Zoya,
+Zoltan,
+Zoe,
+Zlatan,
+Zephyr,
+Zen,
+Zeina,
+Zayd,
+Zainab,
+Zain,
+Zahra,
+Zacharias,
+Yusuf,
+Yuri,
+Yuki,
+Yeong,
+Yelena,
+Yasmina,
+Yasin,
+Yannick,
+Yanis,
+Yael,
+Xzavier,
+Xuan,
+Xiomara,
+Xin,
+Ximun,
+Ximena,
+Xiao,
+Xia,
+Xi,
+Xenia,
+Xavion,
+Xavier,
+Xara,
+Wynn,
+Wren,
+Wolfgang,
+Winnie,
+Willem,
+Willa,
+Widad,
+West,
+Wesley,
+Wendy,
+Wei,
+Walter,
+Wala,
+Wai,
+Vivian,
+Violeta,
+Vinnie,
+Vincenzo,
+Vincent,
+Vinay,
+Viktor,
+Vikram,
+Vijay,
+Vienna,
+Vidya,
+Victoria,
+Vesper,
+Vera,
+Vega,
+Vasili,
+Valentina,
+Uzair,
+Uyen,
+Utku,
+Usman,
+Ursula,
+Uri,
+Urban,
+Una,
+Umber,
+Umar,
+Umama,
+Ulysses,
+Ulrich,
+Ulani,
+Ula,
+Udo,
+Uday,
+Ubaida,
+Tyler,
+Tristan,
+Tobias,
+Thea,
+Thalia,
+Tessa,
+Tatum,
+Tatiana,
+Tariq,
+Tara,
+Tao,
+Tamara,
+Talia,
+Tahir,
+Sun,
+Storm,
+Stella,
+Stefan,
+Sonia,
+Sofia,
+Skylar,
+Sinan,
+Simon,
+Shadow,
+Sergio,
+Selma,
+Selene,
+Sebastian,
+Sari,
+Sara,
+Samuel,
+Samir,
+Samantha,
+Sam,
+Sabrina,
+Ruby,
+Rowan,
+Rose,
+Rory,
+Robert,
+River,
+Rio,
+Riley,
+Ricardo,
+Rhea,
+Rene,
+Ren,
+Rebecca,
+Raul,
+Raquel,
+Rafael,
+Rachel,
+Rabia,
+Quirin,
+Quinlan,
+Quincy,
+Quentin,
+Quang,
+Qiara,
+Qiana,
+Qamar,
+Priya,
+Princess,
+Pranav,
+Poppy,
+Poe,
+Pinky,
+Pierre,
+Phoenix,
+Phoebe,
+Philip,
+Peyton,
+Petra,
+Perla,
+Penelope,
+Pedro,
+Paz,
+Paula,
+Patrick,
+Paola,
+Owen,
+Oscar,
+Orlando,
+Orla,
+Ori,
+Onyx,
+Omar,
+Olivier,
+Olivia,
+Olive,
+Olga,
+Oleg,
+Octavia,
+Ocean,
+Nuri,
+Nuala,
+Nora,
+Noelle,
+Niu,
+Nisha,
+Nina,
+Nikita,
+Nihal,
+Nico,
+Nick,
+Neo,
+Nehemiah,
+Natalie,
+Naomi,
+Nala,
+Nadia,
+Murat,
+Muhammad,
+Morgan,
+Mohammed,
+Miriam,
+Mila,
+Miguel,
+Michael,
+Micah,
+Melissa,
+Maya,
+Mateo,
+Marwa,
+Marcus,
+Malik,
+Madison,
+Madeline,
+Luna,
+Luis,
+Lucas,
+Lorenzo,
+Loren,
+Logan,
+Linden,
+Lina,
+Lily,
+Lila,
+Liam,
+Levi,
+Leonardo,
+Leon,
+Lena,
+Leila,
+Lee,
+Larissa,
+Kona,
+Kofi,
+Kiran,
+Kiko,
+Kian,
+Khaled,
+Kenzo,
+Kelly,
+Keegan,
+Kazuki,
+Kayla,
+Karl,
+Karim,
+Kamila,
+Kaida,
+Kai,
+Juniper,
+Julia,
+Juan,
+Joss,
+Joshua,
+Josephine,
+Jordan,
+Jocelyn,
+Joanna,
+Jihan,
+Jessica,
+Jesse,
+Javier,
+Jasmine,
+Jael,
+Jade,
+Izzy,
+Ivy,
+Ivan,
+Isra,
+Ismail,
+Ishita,
+Isabella,
+Isaac,
+Irina,
+Ingrid,
+Ingram,
+Infinity,
+Ines,
+Indigo,
+Inari,
+Imran,
+Imani,
+Ilias,
+Ignacio,
+Idris,
+Ibrahim,
+Ian,
+Hiroshi,
+Henriette,
+Helena,
+Hector,
+Hazel,
+Hassan,
+Hannah,
+Gustavo,
+Gunnar,
+Grace,
+Gloria,
+Giselle,
+Giovanni,
+Gilbert,
+Ghost,
+George,
+Gemma,
+Garnet,
+Gale,
+Gabriele,
+Gabriel,
+Frost,
+Freya,
+Freddie,
+Frank,
+Flora,
+Fleurette,
+Fleur,
+Fiona,
+Finley,
+Fernando,
+Felix,
+Faye,
+Fatima,
+Farid,
+Faiz,
+Faith,
+Fable,
+Fabio,
+Ezra,
+Evan,
+Eugenia,
+Ethan,
+Esther,
+Esra,
+Esmeralda,
+Eric,
+Emmanuel,
+Emma,
+Emilia,
+Elwynne,
+Ella,
+Elisha,
+Elijah,
+Elias,
+Eliana,
+Eli,
+Elena,
+Eden,
+Dylan,
+Dominic,
+Dmitri,
+Diego,
+Diana,
+Dennis,
+David,
+Darius,
+Darijo,
+Dante,
+Danielle,
+Dana,
+Damian,
+Dallas,
+Dalia,
+Dakota,
+Daisy,
+Dahlia,
+Corey,
+Cleo,
+Clara,
+Claire,
+Christopher,
+Christian,
+Chris,
+Chloe,
+Chiara,
+Chai,
+Celeste,
+Cedric,
+Catalina,
+Carmen,
+Caleb,
+Caius,
+Caitlin,
+Blaine,
+Bilal,
+Bianca,
+Benjamin,
+Bella,
+Beatrix,
+Barbara,
+Baht,
+Bahadir,
+Aviva,
+Aurora,
+Asa,
+Arjun,
+Aria,
+Apollo,
+Anya,
+Anika,
+Andrei,
+Anara,
+Amari,
+Amara,
+Alexander,
+Alex,
+Akira,
+Aisha,
+Aiko,
+Aidan,
+Ahmed,
+Aditi
+</p>
+
+<h3>Nachnamen</h3>
+
+<h4>Vorsilbe</h4>
+
+<p class="liste" data-table="name-nachnamen-vorsilbe">
+Zeit,
+Wüsten,
+Wolken,
+Wirbel,
+Wind,
+Welten,
+Wasser,
+Wald,
+Tropfen,
+Traum,
+Tau,
+Tanz,
+Tal,
+Tag,
+Sturm,
+Still,
+Stern,
+Stein,
+Sprudel,
+Sonnen,
+Silber,
+See,
+Schnee,
+Schmuse,
+Schlürf,
+Schlummer,
+Schimmer,
+Scheeflocken,
+Schatten,
+Saphir,
+Sand,
+Rubin,
+Regenbogen,
+Regen,
+Raschel,
+Purpur,
+Plüsch,
+Plätscher,
+Perlmutt,
+Orkan,
+Opal,
+Nebel,
+Nacht,
+Morgen,
+Moos,
+Mond,
+Marmor,
+Licht,
+Leucht,
+Lavendel,
+Kupfer,
+Kristall,
+Korallen,
+Knuddel,
+Kiesel,
+Jade,
+Honig,
+Himmel,
+Gras,
+Glut,
+Glitzer,
+Glanz,
+Gischt,
+Funken,
+Frost,
+Fluss,
+Flimmer,
+Flausch,
+Flammen,
+Feuer,
+Feen,
+Farn,
+Erden,
+Erd,
+Elfenbein,
+Eisen,
+Eis,
+Donner,
+Dämmerungs,
+Dämmer,
+Blüten,
+Blitz,
+Blatt,
+Bernstein,
+Berg,
+Baum,
+Aschen,
+Alabaster,
+Abend
+</p>
+
+<h4>Nachsilbe</h4>
+
+<p class="liste" data-table="name-nachnamen-nachsilbe">
+Zunge,
+Zeh,
+Zahn,
+Wimper,
+Tentakel,
+Tatze,
+Stosszahn,
+Stacheln,
+Stachel,
+Schwinge,
+Schwimmhaut,
+Schweif,
+Schwanz,
+Schuppe,
+Schnauze,
+Schere,
+Saugnapf,
+Rüssel,
+Pranke,
+Pfote,
+Pelz,
+Panzer,
+Ohr,
+Nase,
+Nabel,
+Muschel,
+Mund,
+Mähne,
+Lippe,
+Krallen,
+Kralle,
+Klaue,
+Kieme,
+Iris,
+Huf,
+Horn,
+Herz,
+Geweih,
+Fühler,
+Fluke,
+Flügel,
+Flosse,
+Fleck,
+Fell,
+Feder,
+Büschel,
+Blesse,
+Beutel,
+Bart,
+Auge,
+Antenne
+</p>
+
+<h2>Ort</h2>
+
+<button id="ort-generieren">Würfeln 🎲</button>
+
+<p id="ort-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="ort-nomen">
+Wüste,
+Watt,
+Wasserloch,
+Wasserfall,
+Wald,
+Vulkan,
+Versteck,
+Tundra,
+Tropfsteinhöhle,
+Teich,
+Tal,
+Tafelberg,
+Sumpf,
+Strasse,
+Steppe,
+Steinwüste,
+See,
+Schlucht,
+Savanne,
+Sandwüste,
+Salzwüste,
+Regenwald,
+Quelle,
+Pfad,
+Oase,
+Moor,
+Mittelgebirge,
+Mangroven,
+Laubwald,
+Lagune,
+Küste,
+Korallenriff,
+Kliff,
+Hügel,
+Höhle,
+Hochgebirge,
+Hochebene,
+Gletscher,
+Geysir,
+Flussdelta,
+Fluss,
+Fjord,
+Felsnadel,
+Ebene,
+Düne,
+Dickicht,
+Brücke,
+Brandung,
+Au,
+Anomalie
+</p>
+
+<p class="liste" data-table="ort-adjektiv">
+zerklüftet,
+zeitlos,
+wunderschön,
+winzig,
+windig,
+wild,
+warm,
+verwunschen,
+verlassen,
+vergessen,
+uralt,
+üppig,
+unheimlich,
+unberührt,
+überflutet,
+traurig,
+traumhaft,
+tief,
+steinig,
+schattig,
+sanft,
+sagenumwoben,
+riesig,
+nebelig,
+mystisch,
+märchenhaft,
+leer,
+lebendig,
+karg,
+kalt,
+isoliert,
+idyllisch,
+hoch,
+grün,
+glühend,
+gespenstisch,
+gefroren,
+fruchtbar,
+friedlich,
+fremdartig,
+entfernt,
+einsam,
+düster,
+dürr,
+blühend,
+besinnlich,
+beseelt,
+beschützt
+</p>
+
+<!--
+
+- Ortsname (Inspiration Ironsworn?)
+
+-->
+
+<h2>Gebäude</h2>
+
+<button id="gebaeude-generieren">Würfeln 🎲</button>
+
+<p id="gebaeude-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="gebaeude">
+Wintergarten,
+Windmühle,
+Weberei,
+Turm,
+Treppe,
+Torbogen,
+Sternwarte,
+Steinkreis,
+Sonnenuhr,
+Seilbrücke,
+Schule,
+Schmiede,
+Rathaus,
+Pyramide,
+Pavillon,
+Observatorium,
+Markthalle,
+Leuchtturm,
+Labyrinth,
+Kräutergarten,
+Kornspeicher,
+Kloster,
+Keller,
+Katakomben,
+Kapelle (Andachtsraum),
+Hügelgrab,
+Holzsteg,
+Höhle,
+Halle,
+Glockenturm,
+Glaswerkstatt,
+Gärtnerei,
+Brunnen,
+Brücke,
+Bibliothek,
+Baum-Haus,
+Bahnhof,
+Aquädukt
+</p>
+
+<h2>Sinn</h2>
+
+<p>In Klammern ist beispielhaft jeweils ein einzelnes Tier angegeben dessen Sinn überdurchschnittlich gut ist.</p>
+
+<button id="sinn-generieren">Würfeln 🎲</button>
+
+<p id="sinn-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="sinn">
+Zeit (Gans),
+Viele Farbrezeptoren (Garnelen),
+Vibration (Elefant),
+UV (Hamster),
+Ultraschall (Fledermaus),
+Temperatur (Mücken),
+Tasten (Ratte),
+Sehen (Adler),
+Schwerkraft (Spinne),
+Schmerz (Meerschweinchen),
+Schmecken (Kuh),
+Riechen (Hund),
+Restlicht (Eule),
+Polarisation (Krebs),
+Pheromon (Ameise),
+Muskelströme (Rochen),
+Magnetische Felder (Schildkröte),
+Luftfeuchtigkeit (Schnecke),
+Infraschall (Taube),
+Infrarot (Mücke),
+Hören (Grille),
+Gleichgewicht (Katze),
+Elektrische Felder (Hai),
+Druck (Tintenfisch),
+Berührung (Affe)
+</p>
+
+<h2>Instrument</h2>
+
+<button id="instrument-generieren">Würfeln 🎲</button>
+
+<p id="instrument-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="instrument">
+Zither,
+Xylophon,
+Tuba,
+Trompete,
+Triangel,
+Tamburin,
+Sitar,
+Saxophon,
+Rassel,
+Quitsche-Ente,
+Querflöte,
+Posaune,
+Pauke,
+Panflöte,
+Orgel,
+Ocarina,
+Oboe,
+Melodica,
+Marimba,
+Mandoline,
+Leier,
+Kontrabass,
+Klavier,
+Klarinette,
+Kastagnetten,
+Horn,
+Harfe,
+Grashalm,
+Gitarre,
+Geige,
+Fagott,
+Dudelsack,
+Drehleier,
+Didgeridoo,
+Blockflöte,
+Akkordeon
+</p>
+
+<h2>Gegenstand</h2>
+
+<button id="gegenstand-generieren">Würfeln 🎲</button>
+
+<p id="gegenstand-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="gegenstand">
+Zange,
+Würfel,
+Wind-Drache,
+Verband,
+Tuch,
+Trank,
+Trampolin,
+Tintenfass,
+Tasche,
+Stoff-Puppe,
+Stift,
+Stiefel,
+Staubwedel,
+Stab,
+Springseil,
+Spiegel,
+Slinky (Schraubenfeder),
+Sichel,
+Sense,
+Seil,
+Schwamm,
+Schnitzwerkzeug,
+Schlüssel,
+Schlitten,
+Schlafmatte,
+Schirm,
+Schild,
+Schere,
+Scherbe,
+Schatzkarte,
+Schale,
+Sanduhr,
+Samen,
+Salzstreuer,
+Rune,
+Rucksack,
+Ring,
+Pulver,
+Pfeffermühle,
+Ohrring,
+Mütze,
+Murmeln,
+Murmel,
+Messer,
+Lupe,
+Löffel,
+Lineal,
+Leiter,
+Laterne,
+Kugel,
+Krug,
+Kristall,
+Kreisel,
+Kräuterbündel,
+Korb,
+Koffer,
+Kochtopf,
+Knetgummi,
+Kleber,
+Kissen,
+Kerze,
+Karte,
+Kamm,
+Jo-Jo,
+Hut,
+Hula Hoop Reifen,
+Handschuh,
+Gürtel,
+Gummiband,
+Glasperle,
+Giesskanne,
+Gemüse,
+Gabel,
+Frucht,
+Flügel,
+Flossen,
+Feuerstein,
+Fernrohr,
+Feder,
+Fallschirm,
+Fadenspiel,
+Elixier,
+Buch,
+Brosche,
+Brief,
+Bogen,
+Bleistift,
+Blatt,
+Beutel,
+Becher,
+Ball,
+Amulett,
+Ahle
+</p>
+
+<h2>Aktion</h2>
+
+<ul>
+<li>Einerseits eine Aktion die zurzeit von etwas durchgeführt wird.</li>
+<li>Eine Tätigkeit, mit der sich das Tier am liebsten beschäftigt und den Tag damit verbringt. Oder aber einfach nur ein Hobby welches das Tier manchmal gerne macht.
+	<ul>
+	<li>heilen: Pflegt und kümmert sich um alle die krank sind.</li>
+	<li>tanzen: Tanzt gerne mit und vor Anderen und unterhaltet andere damit immer wieder.</li>
+	<li>lehren: Nimmt sich regelmässig Zeit um den kleineren etwas beizubringen.</li>
+	<li>freundlich sein: Hört anderen zu und bestärkt sie.</li>
+	</ul>
+</li>
+</ul>
+
+<button id="aktion-generieren">Würfeln 🎲</button>
+
+<p id="aktion-ausgabe" class="tabellen-ausgabe"></p>
+
+<!--
+zimmern (Tischlerin)
+zeichnen (Zeichnerin, Illustratorin)
+wünschen (Wunschfee, Beraterin)
+werfen (Postbotin)
+weben (Weberin, Textilgestalter)
+waschen (Wäscher, Putzmann)
+wandern (Wanderführer, Naturführer)
+verzaubern (Zauberin, Magierin)
+verwandeln (Schauspielerin, Verwandlungskünstlerin)
+verstecken (Kindergärtner)
+untersuchen (Ärztin, Forscherin, Detektivin)
+trösten (Therapeutin, Seelsorgerin, Pflegerin)
+träumen (Traumdeuter, Psychologe, Schlafforscherin, Hypnose-Spezialistin)
+transportieren (Fahrerin, Logistikerin)
+töpfern (Töpferin)
+teilen (Sozialarbeiterin)
+tauchen (Taucherin, Meeresbiologe)
+tanzen (Tänzerin, Tanzlehrer, Choreografin)
+suchen (Detektiv, Archäologin)
+streicheln (Tierpflegerin, Physiotherapeutin)
+spielen (Schauspieler, Musikerin, Spielzeug-Entwicklerin, Kindergärtnerin)
+singen (Sängerin, Gesangslehrer, Chorleiterin)
+schwimmen (Schwimmerin, Schwimmlehrerin, Rettungsschwimmerin)
+schnitzen (Schnitzerin, Holzbildhauerin)
+schneiden (Friseur, Schneider, Film-Schneiderin)
+schminken (Maskenbildner, Kosmetiker)
+sammeln (Sammlerin, Archivar)
+retten (Feuerwehrfrau, Notärztin, Rettungsschwimmerin)
+reparieren (Technikerin, Handwerkerin, Mechanikerin)
+rennen (Läuferin, Leichtathletin)
+reiten (Reiterin, Reitlehrer)
+reden (Rednerin, Moderatorin, Kommunikationstrainer)
+putzen (Putzmann, Hauswirtschafter)
+philosophieren (Philosophin, Dozentin)
+pflegen (Pfleger)
+pflanzen (Gärtner, Landwirtin, Botanikerin)
+nachahmen (Schauspielerin, Imitatorin)
+musizieren (Musiker, Instrumentalistin, Komponistin)
+malen (Malerin, Künstlerin, Kunsttherapeut, Tätowiererin)
+lesen (Vorleserin, Bibliothekar, Lektorin)
+lernen (Lehrer, Dozentin, Ausbilderin)
+lenken (Fahrerin, Pilotin, Kapitänin)
+lehren (Lehrerin, Professorin, Ausbilder)
+lächeln (Clownin)
+konstruieren (Ingenieurin, Konstrukteurin, Architektin)
+komponieren (Komponistin)
+kochen (Köchin, Hauswirtschafter, Ernährungswissenschaftler)
+kneten (Bäckerin, Konditorin, Töpferer)
+klettern (Kletterer, Bergführerin, Alpinistin)
+heilen (Ärztin, Heilpraktikerin, Therapeutin)
+handeln (Händler, Unternehmerin)
+graben (Archäologe, Gärtner, Bauarbeiterin)
+giessen (Giesserin, Gärtner)
+gedankenlesen (Mentalistin, Psychologin)
+freundlich sein (Sozialarbeiter)
+forschen (Forscher, Wissenschaftlerin)
+fliegen (Pilotin, Astronautin)
+färben (Färberin, Friseur, Textilgestalterin)
+falten (Origami-Künstlerin, Packer)
+experimentieren (Wissenschaftlerin, Laborant, Chemikerin)
+erzählen (Geschichtenerzählerin, Autorin, Journalist)
+ernten (Gärtner, Winzerin)
+erforschen (Forscher, Entdeckerin, Wissenschaftlerin)
+einpacken (Packerin, Logistikerin)
+blasen (Glasbläserin, Blasinstrumente-Musikerin)
+bewachen (Wachfrau)
+betreuen (Betreuerin, Sozialarbeiter, Pflegekraft)
+beschwören (Magierin, Zauberer)
+beobachten (Beobachterin, Forscher, Detektivin)
+bauen (Bauarbeiterin, Architekt, Ingenieurin)
+basteln (Bastler, Kunsthandwerkerin, Heimwerkerin)
+balancieren (Artistin, Tänzer, Physiotherapeutin)
+backen (Bäckerin, Konditor, Hauswirtschafterin)
+auskundschaften (Kundschafterin)
+aufführen (Schauspielerin, Tänzer, Musikerin
+-->
+
+<p class="liste" data-table="aktion">
+zimmern,
+zeichnen,
+wünschen,
+werfen,
+weben,
+waschen,
+wandern,
+verzaubern,
+verwandeln,
+verstecken,
+vermitteln,
+untersuchen,
+trösten,
+träumen,
+transportieren,
+töpfern,
+teilen,
+tauchen,
+tanzen,
+suchen,
+studieren,
+streicheln,
+spielen,
+singen,
+schwimmen,
+schreiben,
+schnitzen,
+schneiden,
+schminken,
+schlichten,
+sammeln,
+retten,
+reparieren,
+rennen,
+reiten,
+reden,
+putzen,
+prophezeien,
+philosophieren,
+pflegen,
+pflanzen,
+nachahmen,
+musizieren,
+meditieren,
+malen,
+lesen,
+lernen,
+lenken,
+lehren,
+lächeln,
+konstruieren,
+komponieren,
+kochen,
+kneten,
+klettern,
+heilen,
+handeln,
+graben,
+giessen,
+gedankenlesen,
+freundlich sein,
+forschen,
+fliegen,
+färben,
+falten,
+experimentieren,
+erzählen,
+ernten,
+erforschen,
+entdecken,
+einpacken,
+blasen,
+bewachen,
+betreuen,
+beschwören,
+beschützen,
+beobachten,
+befrieden,
+bauen,
+basteln,
+balancieren,
+backen,
+auskundschaften,
+aufführen,
+arbeiten
+</p>
+
+<h2>Tier</h2>
+
+<button id="tier-generieren">Würfeln 🎲</button>
+
+<p id="tier-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="tier">
+Ziege,
+Zebra,
+Wurm,
+Wolf,
+Wildschwein,
+Wasserschwein,
+Waschbär,
+Wal,
+Tukan,
+Tintenfisch,
+Tiger,
+Tiefseeangler,
+Tausendfüssler,
+Stinktier,
+Steinbock,
+Stachelschwein,
+Spinne,
+Specht,
+Skorpion,
+Siebenschläfer,
+Seidenspinner,
+Seestern,
+Seepferd,
+Seehund,
+Schwertfisch,
+Schwein,
+Schwan,
+Schwamm,
+Schwalbe,
+Schnecke,
+Schnabeltier,
+Schlange,
+Schildkröte,
+Schaf,
+Salamander,
+Rochen,
+Robbe,
+Ren,
+Reiher,
+Reh,
+Raupe,
+Rabe,
+Qualle,
+Python,
+Pinguin,
+Pfau,
+Pelikan,
+Papagei,
+Pangolin,
+Panda,
+Otter,
+Orca,
+Opossum,
+Oktopus,
+Okapi,
+Nilpferd,
+Nashorn,
+Nachtigall,
+Muschel,
+Mücke,
+Maus,
+Marder,
+Luchs,
+Löwe,
+Libelle,
+Lemming,
+Laus,
+Kuh,
+Krokodil,
+Kranich,
+Krähe,
+Krabbe,
+Kormoran,
+Komodowaran,
+Kolibri,
+Koala,
+Klapperschlange,
+Katze,
+Känguru,
+Kamel,
+Kakadu,
+Käfer,
+Iltis,
+Igel,
+Hund,
+Huhn,
+Hirsch,
+Heuschrecke,
+Hase,
+Hai,
+Gürteltier,
+Grille,
+Gottesanbeterin,
+Glühwürmchen,
+Giraffe,
+Gepard,
+Geier,
+Gecko,
+Gazelle,
+Gans,
+Fuchs,
+Frosch,
+Fledermaus,
+Faultier,
+Falke,
+Eule,
+Esel,
+Ente,
+Elster,
+Elefant,
+Eisbär,
+Eichhörnchen,
+Eichelhäher,
+Dromedar,
+Delphin,
+Dachs,
+Chamäleon,
+Büffel,
+Biene,
+Biber,
+Bär,
+Anemone,
+Ameisenbär,
+Ameise,
+Affe,
+Adler,
+Aal
+</p>
+
+<h2>Persönlichkeit</h2>
+
+<button id="persoenlichkeit-generieren">Würfeln 🎲</button>
+
+<p id="persoenlichkeit-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="persoenlichkeit">
+zuverlässig,
+zielstrebig,
+willensstark,
+wertschätzend,
+weitsichtig,
+weise,
+wahrheitsliebend,
+vorsichtig,
+vorausschauend,
+verständnisvoll,
+verschwenderisch,
+verschlossen,
+verletzt,
+verantwortungsbewusst,
+unzuverlässig,
+unsicher,
+unpünktlich,
+unorganisiert,
+ungeduldig,
+unentschlossen,
+unabhängig,
+umgänglich,
+traurig,
+traditionsbewusst,
+tolerant,
+talentiert,
+stur,
+stolz,
+spontan,
+spirituell,
+solidarisch,
+sensibel,
+selbstsicher,
+selbstlos,
+reumütig,
+respektvoll,
+resilient,
+rebellisch,
+realistisch,
+rational,
+querdenkend,
+pessimistisch,
+perfektionistisch,
+organisiert,
+ordentlich,
+neugierig,
+natürlich,
+nachlässig,
+mysteriös,
+mutig,
+mitfühlend,
+misstrauisch,
+loyal,
+liebevoll,
+liebenswürdig,
+leidenschaftlich,
+lebensfroh,
+künstlerisch,
+kooperativ,
+intuitiv,
+introvertiert,
+impulsiv,
+idealistisch,
+humorvoll,
+höflich,
+hilfsbereit,
+herzensgut,
+hartnäckig,
+harmonisch,
+grosszügig,
+gewissenhaft,
+gesellig,
+geschickt,
+gefühlvoll,
+geduldig,
+furchtlos,
+flexibel,
+feurig,
+fantasievoll,
+extrovertiert,
+erfahren,
+entstellt,
+entschlossen,
+empathisch,
+emotional,
+einfühlsam,
+eigenständig,
+ehrlich,
+durchsetzungsfähig,
+diszipliniert,
+direkt,
+dickköpfig,
+dankbar,
+charmant,
+besonnen,
+besessen,
+bescheiden,
+begeisterungsfähig,
+bedacht,
+ausdauernd,
+aufrichtig,
+aufbrausend,
+athletisch,
+anpassungsfähig,
+ängstlich,
+analytisch,
+ambitioniert,
+abergläubisch,
+abenteuerlustig
+</p>
+
+<h2>Aussehen</h2>
+
+<button id="aussehen-generieren">Würfeln 🎲</button>
+
+<p id="aussehen-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="aussehen">
+Zweifarbige Iris (Iris-Heterochromie),
+Wuschelkopf,
+Wirbelwind-Haar,
+Unterschiedliche Augenfarben,
+Tigerstreifen,
+Sternschnuppen-Augen,
+Sommersprossen,
+Schuppen,
+Regenbogenfell,
+Regenbogenaugen,
+Ohrring,
+Narbe,
+Muttermal,
+Leuchtend (Biolumineszenz),
+Leberfleck,
+Körperbemalung,
+Kicher-Lücke,
+Henna,
+Glitzerhaar,
+Funkel-Haut,
+Fehlendes Horn,
+Fehlender Zahn,
+Federn,
+Farbiges Fell,
+Eulenaugen,
+Eigenständiges Haar,
+Albino
+</p>
+
+<h2>Ziel</h2>
+
+<p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie könnt auch ihr daraus etwas erfinden.</p>
+
+<p>Ziel kann verschieden interpretiert werden z.B.: Teilziel einer Gruppenaufgabe, persönliches Ziel eines Tieres, die Motivation eines Lebewesens, ...</p>
+
+<ul>
+<li>Auftrag reparieren: Der Brief der übermittelt werden sollte ist zerrissen und muss wieder repariert werden.</li>
+<li>Botschafter gründen: Für Katzen eine Anführerin suchen, welche mehr Sonnenplätze einfordert.</li>
+<li>Name fliehen: Ein Tier muss sein Name loswerden und vielleicht wieder einen neuen finden.</li>
+<li>Ruf gründen: Anderen erklären dass der Drache nur ein Frucht-Drache ist, der süsses über alles mag.</li>
+<li>Schatz imitieren: Die Glitzersteinkette, mit einer Kette aus bemalten Steinen ersetzen.</li>
+<li>Tier fälschen: Aus Pappmaché ein Nilpferd erstellen.</li>
+<li>Traum bauen: Aus Mondstaub ein Kissen herstellen, welches dabei hilft unliebsame Träume zu vertreiben.</li>
+</ul>
+
+<button id="ziel-generieren">Würfeln 🎲</button>
+
+<p id="ziel-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="ziel-nomen">
+Zuhause,
+Wissen,
+Werkzeug,
+Wahrheit,
+Vorrat,
+Versprechen,
+Unterkunft,
+Umgebung,
+Tür,
+Tunnel,
+Treppe,
+Traum,
+Tier,
+Sturm,
+Stein,
+Statue,
+Seltenes,
+Schuld,
+Schneeflocke,
+Schild,
+Schiff,
+Schatz,
+Ruf,
+Rennen,
+Rätsel,
+Portal,
+Pflanze,
+Ort,
+Nordlichter,
+Natur,
+Name,
+Medizin,
+Maschine,
+Lied,
+Liebe,
+Legende,
+Krankheit,
+Kompass,
+Keller,
+Instrument,
+Insel,
+Identität,
+Heilmittel,
+Haus,
+Gruppe,
+Gilde,
+Gewässer,
+Gesundheit,
+Geschichte,
+Geschenk,
+Geist,
+Geheimnis,
+Geheimes,
+Gegenstand,
+Gefahr,
+Freundschaft,
+Freiheit,
+Flagge,
+Fertigkeit,
+Erfindung,
+Entdeckung,
+Einzigartiges,
+Buch,
+Botschafter,
+Blume,
+Bibliothek,
+Behälter,
+Auftrag,
+Artefakt,
+Archive,
+Angst
+</p>
+
+<p class="liste" data-table="ziel-verb">
+verstecken,
+vereinen,
+verbessern,
+überqueren,
+tauschen,
+sprechen,
+sein,
+sammeln,
+retten,
+reparieren,
+reisen,
+nachahmen,
+kennenlernen,
+imitieren,
+herausfinden,
+heilen,
+gründen,
+gewinnen,
+folgen,
+fliehen,
+finden,
+erstellen,
+erlangen,
+erklimmen,
+erfüllen,
+entschlüsseln,
+entdecken,
+davonschwimmen,
+davonrennen,
+davonfliegen,
+beschwören,
+beschützen,
+begleichen,
+bauen,
+anlegen
+</p>
+
+<h2>Herausforderung</h2>
+
+<button id="herausforderung-generieren">Würfeln 🎲</button>
+
+<p id="herausforderung-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="herausforderung">
+Unerwartete Gefühle,
+Unbekannte Sprache,
+Etwas zeigt Kindheitserinnerungen.,
+Etwas wird verletzt,
+Etwas wacht mit fremden Erinnerungen auf aber wem gehören diese Gedanken?,
+Etwas verschwundenes kehrt zurück,
+Etwas verschwindet,
+Etwas vergrössert Kleinigkeiten und verkleinert Wichtiges,
+Etwas läuft rückwärts,
+Etwas hört Stimmen die sonst nicht gehört werden,
+Etwas findet eine Höhle mit Malereien,
+Etwas beginnt zu sprechen,
+Etwas aussergewöhnliches wird entdeckt,
+Es ist zu spät,
+Es ist zu früh,
+Eine wahre Identität wird enthüllt,
+Eine Reise beginnt,
+Eine Prophezeiung war falsch - absichtlich,
+Eine Prophezeiung war falsch,
+Eine Prophezeiung erfüllt sich,
+Eine neue Liebe beginnt,
+Eine Naturkatastrophe,
+Eine lange Reise endet,
+Eine Karte zeigt keinen Ort,
+Eine Karte taucht auf,
+Eine Gefahr,
+Eine falsche Identität wird aufgedeckt,
+Eine falsche Annahme falsch,
+Eine Expedition stösst auf eine unberührte Gruppe,
+Eine Erinnerung,
+Eine Entscheidung muss getroffen werden,
+Eine alte Wunde wird wieder aufgerissen,
+Ein Wunder geschieht,
+Ein Wettkampf beginnt,
+Ein Unfall verändert alles,
+Ein Traum wird zur Realität,
+Ein Tier zeigt eine alternative Zukunft,
+Ein Tier verlangt ein Lachen als Eintritt,
+Ein Schatz wird gefunden,
+Ein Rätsel muss gelöst werden,
+Ein Portal öffnet sich,
+Ein Meteorit verändert die Landschaft,
+Ein Lebewesen wird von etwas besessen,
+Ein Lebewesen wechselt die Seiten,
+Ein Lebewesen verschwindet spurlos,
+Ein Lebewesen verliebt sich,
+Ein Lebewesen trifft sein zukünftiges Ich,
+Ein Lebewesen opfert sich,
+Ein Lebewesen macht etwas grossartiges,
+Ein Lebewesen hat eine gespaltene Persönlichkeit,
+Ein Lebewesen findet Erlösung,
+Ein Lebewesen erzählt nur die halbe Wahrheit,
+Ein Lebewesen erleidet einen Nervenzusammenbruch,
+Ein Kind wird geboren,
+Ein Kind sieht Dinge die Erwachsene nicht sehen können,
+Ein Geheimnis wird enthüllt,
+Ein falscher Verdacht entsteht,
+Ein Dorf verschwindet über Nacht,
+Ein Doppelgänger taucht auf,
+Ein Bündnis,
+Die Zeit scheint still zu stehen,
+Die Welt verändert sich,
+Die war nur eine Illusion,
+Die Magie verschwindet plötzlich,
+Die letzte Seite des Buches fehlt,
+Die Gesetze der Physik brechen zusammen,
+Die Geschichte wiederholt sich,
+Die Erinnerungen waren falsch,
+Das ist verzaubert,
+Alles war nur ein Traum ... oder doch nicht?
+Spiegelt die innersten Ängste
+</p>
+
+<h2>Abenteuer</h2>
+
+<button id="abenteuer-generieren">Würfeln 🎲</button>
+
+<p id="abenteuer-ausgabe" class="tabellen-ausgabe"></p>
+
+<h2>Ende</h2>
+
+<button id="ende-generieren">Würfeln 🎲</button>
+
+<p id="ende-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="ende">
+Nichts wird mehr sein wie vorher,
+Es wird etwas für die Zukunft hinterlassen,
+Eine Figur gibt etwas unersetzliches auf,
+Ein mysteriöse Geschenk wird überbracht,
+Ein Geheimnis wird gelüftet,
+Die Vorhersage stimmt,
+Die Geschichte endet in einer Frage,
+Die Aufgabe hatte einen anderen Sinn,
+Der Kreis schliesst sich,
+Das Abenteuer ist vorbei,
+Alles war anders als gedacht,
+Alles scheint gut,
+Alle kehren glücklich zu ihrem Zuhause zurück,
+Aber nicht so wie alle dachten,
+Aber etwas neues beginnt,
+Aber eine kleine Aufgabe wartet noch
+</p>
+
+<h2>Essen</h2>
+
+<button id="essen-generieren">Würfeln 🎲</button>
+
+<p id="essen-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="essen">
+Zwiebel,
+Zucker,
+Zucchini,
+Trauben,
+Tortilla,
+Tomate,
+Teig,
+Taco,
+Süsskartoffel,
+Suppe,
+Spinat,
+Spaghetti,
+Sorbet,
+Senf,
+Schokolade,
+Salat,
+Risotto,
+Reis,
+Puderzucker,
+Pudding,
+Pommes Frites,
+Pizza,
+Pilze,
+Pesto,
+Paprika,
+Orange,
+Öl,
+Nudeln,
+Müsli,
+Mousse,
+Melone,
+Mayonnaise,
+Marzipan,
+Mango,
+Linsen,
+Kuchen,
+Krapfen,
+Knoblauch,
+Kiwi,
+Ketchup,
+Kaugummi,
+Kartoffel,
+Karotte,
+Humus,
+Himbeere,
+Haferflocken,
+Gurke,
+Gemüse-Bouillon,
+Gelee,
+Gazpacho (Kalte Suppe),
+Frühlingsrollen,
+Falafel,
+Fajita,
+Erdbeere,
+Eiscreme,
+Dauerlutscher (Schleckstängel),
+Curry,
+Creme,
+Burrito,
+Brot,
+Brombeere,
+Brokkoli,
+Bonbon,
+Blumenkohl,
+Blaubeere,
+Banane,
+Avocado,
+Aubergine,
+Apfel,
+Ananas
+</p>
+
+<h2>Getränk</h2>
+
+<button id="getraenk-generieren">Würfeln 🎲</button>
+
+<p id="getraenk-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="getraenk">
+Tee,
+Smoothie,
+Sirup,
+Quellwasser,
+Mate,
+Kaffee,
+Hafer-Milch,
+Fruchtsaft,
+Eistee,
+Brause
+</p>
+
+<h2>Farbe</h2>
+
+<button id="farbe-generieren">Würfeln 🎲</button>
+
+<p id="farbe-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="farbe">
+Weiss,
+Violett,
+Türkis,
+Schwarz,
+Rot,
+Regenbogen,
+Pink,
+Orange,
+Lila,
+Hell,
+Grün,
+Grau,
+Gelb,
+Durchsichtig,
+Dunkel,
+Bunt,
+Braun,
+Blau
+</p>
 
 </div>
 

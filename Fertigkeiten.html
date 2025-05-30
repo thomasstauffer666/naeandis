@@ -3,31 +3,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="Plattform.css">
 <script src="header.js"></script>
-<title>Naeandis Fertigkeiten</title>
+<script src="autonav.js"></script>
+<title>Naeandis - Fertigkeiten</title>
 <style>
 :root {
 }
 
 img {
-	width: 6rem;
+	width: 10rem;
 	border-radius: 0.5rem;
 }
 
 .kategorie {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 0.5rem;
+	gap: 1rem;
 }
 
 h2 {
 	-break-before: always;
 }
 
+img:active {
+	transform: scale(3);
+}
+
 @media print {
 	.kategorie div {
 		padding: 0.5rem;
-		border: 0.2rem solid #363;
-		border-radius: 1rem;
+		border: 0.1rem dashed #363;
 	}
 }
 </style>
@@ -39,10 +43,11 @@ h2 {
 
 <h1>Fertigkeiten</h1>
 
+<nav></nav>
+
 <h2>Tiere</h2>
 
-<p>Jedes Gspänli hat die Karte mit den Fertigkeiten die zu seinem Tier passen. Normalerweise hat jedes Tier nur 1 Tierfertigkeit. Mit einem langwierigen Ritual kannst du die Fertigkeiten von einem anderen Tier dazu gewinnen.</p>
-<p>Deine Tier Fertigkeiten kosten keine Ausdauer.</p>
+<p>Jedes Gspänli hat die Karte mit den Fertigkeiten die zu seinem Tier passen.</p>
 
 <div class="kategorie">
 
@@ -166,7 +171,6 @@ Adler
 <h2>Bewachende</h2>
 
 <p>Wenn du dich entscheidest eine Bewachendes Gspänli zu sein, dann bedeutet dass das du dass, dass du dich in Zukunft für etwas stark machst und dich dafür einsetzt. Bist du z.B. ein Baum-Bewachendes Gspänli, verpflichtest du dich für Bäume da zu sein. Wenn deine anderen Gspänli nach einer Spielrunden zusammen entscheiden dass du deiner Rolle nicht gerecht wirst, kann es auch passieren dass du deine Fertigkeit wieder verlierst.</p>
-<p>Deine Bewachende Fertigkeit zu Nutzen kostet immer 1 Ausdauer.</p>
 
 <div class="kategorie">
 
@@ -236,27 +240,36 @@ Adler
 <div>
 	<h3>Eis-Bewachende</h3>
 	<ul>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
 	</ul>
 </div>
 
 <div>
 	<h3>Stern-Bewachende</h3>
 	<ul>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
 	</ul>
 </div>
 
 <div>
 	<h3>Feen-Bewachende</h3>
 	<ul>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
-		<li em class="">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Wolken-Bewachende</h3>
+	<ul>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
+		<li em class="fertigkeit">?</li>: ?</li>
 	</ul>
 </div>
 
@@ -265,7 +278,6 @@ Adler
 <h2>Gegenstände</h2>
 
 <p>Um den Gegenstand zu Nutzen, musst du ihn berühren können.</p>
-<p>Einen Gegenstand zu Nutzen kostet immer 1 Ausdauer.</p>
 
 <div class="kategorie">
 
@@ -309,12 +321,201 @@ Adler
 	</ul>
 </div>
 
+<div>
+	<h3>Bienen Glocke</h3>
+	<img src="Fertigkeiten/Bienen-Glocke.webp">
+	<ul>
+		<li><em class="fertigkeit">Schwarmintelligenz</em>: Du brauchst etwas Hilfe? Ein Schwarm von Bienen wird dich suchen und dir helfen.</li>
+		<li><em class="fertigkeit">Honig</em>: Wenn keine Ausdauer mehr hast und eine kleine Stärkung benötigst helfen dir Bienen diese zu finden. Nimm aber nicht alles, auch die Bienen sind auf ihren Honig angewiesen.</li>
+		<li><em class="fertigkeit">Jahreszeitenwechsel</em>: Kann kurzzeitig die Jahreszeit verändern.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Chamäleon Umhang</h3>
+	<img src="Fertigkeiten/Chamäleon-Umhang.webp">
+	<ul>
+		<li><em class="fertigkeit">Stimmung</em>: Dein Mantel kann die Stimmung von dir nahestenden Lebewesen zeigen.</li>
+		<li><em class="fertigkeit">Tarnung</em>: Du kannst dich der Umgebung anpassen, so dass du nur schwer zu entdecken bist.</li>
+		<li><em class="fertigkeit">Mimikry</em>: Du sieht wie ein anderes Lebewesen aus.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Fussabdruck Stein</h3>
+	<img src="Fertigkeiten/Fussabdruck-Stein.webp">
+	<ul>
+		<li><em class="fertigkeit">Spuren-Erinnerung</em>: Kann dir Pfaden zeigen die andere Lebewesen früher verwendet haben.</li>
+		<li><em class="fertigkeit">Wanderwege</em>: Zeigt dir unsichtbare Pfade an.</li>
+		<li><em class="fertigkeit">Abdruck</em>: Kann anhand eines Abdruckes erkennen zu welchem Lebewesen er gehört. Oder kann Abdrücke im Boden von anderen Lebewesen machen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Kinder Beutel</h3>
+	<img src="Fertigkeiten/Kinder-Beutel.webp">
+	<ul>
+		<li><em class="fertigkeit">Schlummern</em>: Ein kleines Lebewesen das im Beutel ist beruhigt sich sofort und beginnt einen ruhigen Schlaf.</li>
+		<li><em class="fertigkeit">Spielzeug</em>: Kann aus Pflanzen Spielzeug formen.</li>
+		<li><em class="fertigkeit">Kichern</em>: Kann das kichern von anderen Lebewesen nachahmen und das so lustig dass meistens alle lachen müssen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Kolibri Amulet</h3>
+	<img src="Fertigkeiten/Kolibri-Amulet.webp">
+	<ul>
+		<li><em class="fertigkeit">Flügel</em>: Erlaubt es kurzzeitig in alle Richtungen zu fliegen.</li>
+		<li><em class="fertigkeit">Verformen</em>: Kann sich in beliebige kleine oder auch lange Formen verwandeln. Ist damit an Werkzeug um an kleine Gegenstände zu gelangen.</li>
+		<li><em class="fertigkeit">Verlangsamen</em>: Für eine kurze Zeit vergeht die Zeit für dich viel langsamer.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Lebendigkeits-Umhang</h3>
+	<img src="Fertigkeiten/Lebendigkeits-Umhang.webp">
+	<ul>
+		<li><em class="fertigkeit">Pulsieren</em>: Wo immer du den Mantel hinlegst sieht wie das Leben pulsiert.</li>
+		<li><em class="fertigkeit">Tanzen</em>: Sobald irgend Musik ertönst, kannst du dazu mit deinem Tanz andere verzaubern.</li>
+		<li><em class="fertigkeit">Muntermacher</em>: Wenn du den Mantel einem Lebewesen umlegst dass etwas Müde ist, dann fühlt es wie die Energie zurückkehrt.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Samen Tasche</h3>
+	<img src="Fertigkeiten/Samen-Tasche.webp">
+	<ul>
+		<li><em class="fertigkeit">Samenvorrat</em>: Kann Samen von unterschiedlichsten Blumen aufbewahren. Werden die Samen in einer ihr günstigen Jahreszeit gestreut dann beginnen sie fast unmittelbar zu wachsen.</li>
+		<li><em class="fertigkeit">Pusteblume</em>:Hast du einen Löwenzahn gefunden der am verblühen ist kann sein Schirmchen riesig werden und dich und deine Freunde davon tragen.</li>
+		<li><em class="fertigkeit">Gedanken Samen</em>: Du kannst einen Gedanken an ein anderes Lebewesen weitergeben das lange darüber nachdenken wird.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Marienkäfer Umhang</h3>
+	<img src="Fertigkeiten/Marienkäfer-Umhang.webp">
+	<ul>
+		<li><em class="fertigkeit">Glück</em>: Bringt dem Träger oder einem anderen Wesen Glück.</li>
+		<li><em class="fertigkeit">Panzer</em>: Der Umhang schützt dich.</li>
+		<li><em class="fertigkeit">Fallschirm</em>: Wenn du fällst und den Mantel ausbreitest, fällst du langsam wie ein Blatt herunter.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Mondstaub</h3>
+	<img src="Fertigkeiten/Mondstaub.webp">
+	<ul>
+		<li><em class="fertigkeit">Träumen</em>: Wer den Staub einatmet kann sich nur schwer gegen seine Schläfrigkeit wehren und fällt in einen tiefen Traum bis ihm etwas passiert oder zum nächsten morgen.</li>
+		<li><em class="fertigkeit">Leuchten</em>: Wo den den Sand hinstreust beginnt es zu leuchten.</li>
+		<li><em class="fertigkeit">Silber</em>: Wenn der Sand beleuchtet wird, verwandelt er sich in Silber.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Muschel</h3>
+	<img src="Fertigkeiten/Muschel.webp">
+	<ul>
+		<li><em class="fertigkeit">Gezeiten</em>: Kein Ebbe und Flut beeinflussen.</li>
+		<li><em class="fertigkeit">Perle</em>: Beinhaltet manchmal etwas wunderhübsches.</li>
+		<li><em class="fertigkeit">Meeres Flüstern</em>: Kann in der Nähe eines Gewässern verstehen was das Wasser flüstert.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Nuss Behälter</h3>
+	<img src="Fertigkeiten/Nuss-Behälter.webp">
+	<ul>
+		<li><em class="fertigkeit">Winter Vorrat</em>: Hat Platz für beliebig viele Nüsse.</li>
+		<li><em class="fertigkeit">Nuss Knacker</em>: Kann Dinge öffnen für die es viel Kraft benötigt.</li>
+		<li><em class="fertigkeit">Lebensweg</em>: Eine Nuss die aus dem Behälter ziehst hat einen persönlichen Hinweis für dich.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Obsidian Zwitscherstein</h3>
+	<img src="Fertigkeiten/Obsidian-Zwitscherstein.webp">
+	<ul>
+		<li><em class="fertigkeit">Flissendes Glas</em>: Gibt eine spezielle Melodie aus, so dass Glas beginnt zu fliessen und verformt werden kann.</li>
+		<li><em class="fertigkeit">Imitieren</em>: Kann das zwitschern von Vögeln nachahmen.</li>
+		<li><em class="fertigkeit">Zittern</em>: Wenn du ihn berührst, beginnt er zu zittern wenn etwas gefährliches in der Nähe ist.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Rinden Pfeife</h3>
+	<img src="Fertigkeiten/Rinden-Pfeife.webp">
+	<ul>
+		<li><em class="fertigkeit">Bass</em>: Gibt einen tiefen langen Ton aus der von weit her gehört werden kann.</li>
+		<li><em class="fertigkeit">Harz</em>: Gibt langsam Harz ab, das für alles mögliche verwendet werden kann z.B. zum Leimen, als Verband.</li>
+		<li><em class="fertigkeit">Baum Seele</em>: Hilft dir dabei die schlafenden Seelen von Bäumen zu wecken und mit Ihnen zu sprechen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Schneeschritt Feder</h3>
+	<img src="Fertigkeiten/Schneeschritt-Feder.webp">
+	<ul>
+		<li><em class="fertigkeit">Lautlos</em>: Es gibt beim gehen keine Geräusche.</li>
+		<li><em class="fertigkeit">Spurlos</em>: Beim gehen werden keine Spuren hinterlassen, auch nicht im Schnee.</li>
+		<li><em class="fertigkeit">Daune</em>: Gibt Wärme, auch im kältesten Winter.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Schnurr Perle</h3>
+	<img src="Fertigkeiten/Schnurr-Perle.webp">
+	<ul>
+		<li><em class="fertigkeit">Schnurren</em>: Beginnt wohlig zu schnurren und vibrieren wenn du die Perle streichelst.</li>
+		<li><em class="fertigkeit">9 Leben</em>: Hilft einem verletzen Lebewesen sich schneller zu erholen.</li>
+		<li><em class="fertigkeit">Kehr Zurück</em>: Wo auch immer du die Perl hinrollst, sie findet immer irgend einen Weg zu dir zurück.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Spinnenweben Handschuhe</h3>
+	<img src="Fertigkeiten/Spinnenweben-Handschuhe.webp">
+	<ul>
+		<li><em class="fertigkeit">Netz</em>: Es braucht seine Zeit, aber du kannst beliebige Netze damit formen. Die Netze sind dehnbar und eigenen sich z.B. wunderbar als Trampolin.</li>
+		<li><em class="fertigkeit">Verbinden</em>: Du kannst mit einzelnen Fäden Dinge miteinander verbinden.</li>
+		<li><em class="fertigkeit">Morgentau</em>: Wenn du durstig bist, kannst du damit Morgentau aus der Luft sammeln.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Uhu Anhänger</h3>
+	<img src="Fertigkeiten/Uhu-Anhänger.webp">
+	<ul>
+		<li><em class="fertigkeit">Weisheit</em>: Gibt einem Einsicht, wenn Du etwas kompliziertes vor dir hast, dass du noch nicht so ganz verstehst.</li>
+		<li><em class="fertigkeit">Gehör</em>: Du kannst auch die leisesten Geräusch noch wahrnehmen.</li>
+		<li><em class="fertigkeit">Herzensfeder</em>: Zum Uhu Anhänge gehört eine kleine Feder dazu. Wem auch immer du diese gibst, du spürst wie diesem Wesen geht.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Wasser Schuppen</h3>
+	<img src="Fertigkeiten/Wasser-Schuppen.webp">
+	<ul>
+		<li><em class="fertigkeit">Seifenblasen</em>: Sobald du etwas Wasser hast, kannst du draus kleine, grosse und auch riesige Seifenblasen machen.</li>
+		<li><em class="fertigkeit">Wasserabweisend</em>: Die Schuppen sind wasserabweisend wo auch immer du sie verwendest.</li>
+		<li><em class="fertigkeit">Schwimmen</em>: Gehst du ins Wasser wird dein Körper leicht schuppig und damit kannst du viel schneller durchs Wasser schiwmmen.</li>
+	</ul>
+</div>
+
+<div>
+	<h3>Wind Fusskettchen</h3>
+	<img src="Fertigkeiten/Wind-Fusskettchen.webp">
+	<ul>
+		<li><em class="fertigkeit">Schweben</em>: Trägt Du die Fusskettchen, schwebst du leicht über dem Boden, was das wandern über Berg und Stein vereinfacht.</li>
+		<li><em class="fertigkeit">Wind Flüstern</em>: Wer es trägt kann dem Wind zuhören.</li>
+		<li><em class="fertigkeit">Aufräumen</em>: Was auch immer du aufräumst oder putzt, es scheint als helfe dir der Wind.</li>
+	</ul>
+</div>
+
 </div>
 
 <h2>Zauber</h2>
 
 <p>Ein Zauber ist immer an ein Gegenstand gebunden. Dass kann ein Zauberstab, ein Amulett, ein Ring und vieles mehr sein. Das ist eine Entscheidung.</p>
-<p>Einen Zauber zu Nutzen kostet immer 1 Ausdauer.</p>
 
 <div class="kategorie">
 
