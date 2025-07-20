@@ -14,7 +14,7 @@
 
 .karten-ausgabe {
 	max-width: 80vh;
-	margin: 0 auto;	
+	margin: 0 auto;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
 	justify-items: stretch;
@@ -41,18 +41,10 @@ function randomWeighted(items, weights) {
 	const random = Math.random() * sum;
 	let cumulative = 0;
 	return items.find((_, i) => (cumulative += weights[i]) >= random);
-};	
+};
 
 function mainTabellen() {
 	const tabellen = {};
-
-	function liste(callable) {
-		return range(5).map($ => callable()).join(', ');
-	}
-
-	function einzeln(callable) {
-		return callable();
-	}
 
 	// Nach Zufall von einer oder mehreren Tabellen auswählen
 	function t(...keys) {
@@ -82,42 +74,43 @@ function mainTabellen() {
 	}
 
 	function geschichteGenerieren() {
-		const ort = t('ort-nomen');
-		const schluesslfigur = t('tier') + ', ' + t('persoenlichkeit') + ', ' + t('aussehen');
+		const ort = t('ort-nomen', 'gebaeude') + ' ' + t('ort-adjektiv');
+		const schluesslfigur = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit') + ', ' + t('aussehen');
 		const aufgabe = t('ziel-nomen') + ' ' + t('ziel-verb');
-		const begleitung1 = t('tier') + ', ' + t('persoenlichkeit');
-		const begleitung2 = t('tier') + ', ' + t('persoenlichkeit');
-		const hindernis1 = 'TODO';
-		const hindernis2 = 'TODO';
-		const hilfe = t('tier') + ', ' + t('persoenlichkeit');
-		const wendung = t('wendung');
+		const begleitung1 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
+		const begleitung2 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
 		const gegenstand = t('gegenstand', 'instrument');
-		const ende = 'TODO';
-		const geschichte = `Ort: ${ort}\nSchlüsselfigur: ${schluesslfigur}\nAufgabe: ${aufgabe}\nBegleitung 1: ${begleitung1}\nBegleitung 2: ${begleitung2}\nHindernis 1: ${hindernis1}\nHindernis 2: ${hindernis2}\nUnerwartete Hilfe: ${hilfe}\nGegenstand: ${gegenstand}\nWendung: ${wendung}\nEnde: ${ende}`;
+		const herausforderung1 = t('herausforderung');
+		const hilfe = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
+		const herausforderung2 = t('herausforderung');
+		const ende = t('ende');
+		const geschichte = `Ort: ${ort}\nSchlüsselfigur: ${schluesslfigur}\nAufgabe: ${aufgabe}\nBegleitung 1: ${begleitung1}\nBegleitung 2: ${begleitung2}\nGegenstand: ${gegenstand}\nErste Herausforderung: ${herausforderung1}\nUnerwartete Hilfe: ${hilfe}\nZweite Herausforderung: ${herausforderung2}\nEnde: ${ende}`;
 		return geschichte;
 	}
 
 	const generatoren = {
-		'name': [liste, nameGenerieren],
-		'ziel': [liste, () => t('ziel-nomen') + ' ' + t('ziel-verb')],
-		'tier': [liste, () => t('tier')],
-		'ort': [liste, () => t('ort-nomen') + ' ' + t('ort-adjektiv')],
-		'sinn': [liste, () => t('sinn')],
-		'aktion': [liste, () => t('aktion')],
-		'gegenstand': [liste, () => t('gegenstand')],
-		'instrument': [liste, () => t('instrument')],
-		'persoenlichkeit': [liste, () => t('persoenlichkeit')],
-		'aussehen': [liste, () => t('aussehen')],
-		'wendung': [liste, () => t('wendung')],
-		'essen': [liste, () => t('essen')],
-		'getraenk': [liste, () => t('getraenk')],
-		'farbe': [liste, () => farbeGenerieren()],
-		//'geschichte': [einzeln, geschichteGenerieren],
+		'name': [5, nameGenerieren],
+		'ziel': [5, () => t('ziel-nomen') + ' ' + t('ziel-verb')],
+		'tier': [5, () => t('tier')],
+		'ort': [5, () => t('ort-nomen') + ' ' + t('ort-adjektiv')],
+		'ende': [5, () => t('ende')],
+		'gebaeude': [5, () => t('gebaeude')],
+		'sinn': [5, () => t('sinn')],
+		'aktion': [5, () => t('aktion')],
+		'gegenstand': [5, () => t('gegenstand')],
+		'instrument': [5, () => t('instrument')],
+		'persoenlichkeit': [5, () => t('persoenlichkeit')],
+		'aussehen': [5, () => t('aussehen')],
+		'herausforderung': [5, () => t('herausforderung')],
+		'essen': [5, () => t('essen')],
+		'getraenk': [5, () => t('getraenk')],
+		'farbe': [5, () => farbeGenerieren()],
+		'geschichte': [1, geschichteGenerieren],
 	};
 
-	Object.entries(generatoren).forEach(([name, [groupCallable, entryCallable]]) => {
+	Object.entries(generatoren).forEach(([name, [repeat, entryCallable]]) => {
 		function generate() {
-			const result = groupCallable(entryCallable);
+			const result = range(repeat).map($ => entryCallable()).join(', ');
 			document.getElementById(name + '-ausgabe').innerText = result;
 		}
 		document.getElementById(name + '-generieren').addEventListener('click', generate);
@@ -866,6 +859,53 @@ beseelt,
 beschützt
 </p>
 
+<h2>Gebäude</h2>
+
+<button id="gebaeude-generieren">Würfeln 🎲</button>
+
+<p id="gebaeude-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="gebaeude">
+Wintergarten,
+Windmühle,
+Weberei,
+Turm,
+Treppe,
+Torbogen,
+Sternwarte,
+Steinkreis,
+Sonnenuhr,
+Seilbrücke,
+Schule,
+Schmiede,
+Rathaus,
+Pyramide,
+Pavillon,
+Observatorium,
+Markthalle,
+Leuchtturm,
+Labayrinth,
+Kornspeicher,
+Kloster,
+Keller,
+Katakomben,
+Kärutergarten,
+Kapelle (Andachtsraum),
+Hügelgrab,
+Holzsteg,
+Höhle,
+Glockenturm,
+Glaswerkstatt,
+Gärtnerei,
+Brunnen,
+Brücke,
+Bibliothek,
+Bibliotek,
+Baum-Haus,
+Bahnhof,
+Äquadukt
+</p>
+
 <h2>Sinn</h2>
 
 <p>In Klammern ist beispielhaft jeweils ein einzelnes Tier angegeben dessen Sinn überdurchschnittlich gut ist.</p>
@@ -956,21 +996,24 @@ Akkordeon
 <p class="liste" data-table="gegenstand">
 Zange,
 Würfel,
+Wind-Drache,
 Verband,
 Tuch,
 Trank,
 Trampolin,
 Tintenfass,
 Tasche,
+Stoff-Puppe,
 Stift,
 Stiefel,
-Steil,
 Staubwedel,
 Stab,
 Springseil,
 Spiegel,
+Slinky (Schraubenfeder),
 Sichel,
 Sense,
+Seil,
 Schwamm,
 Schnitzwerkzeug,
 Schlüssel,
@@ -992,6 +1035,7 @@ Pulver,
 Pfeffermühle,
 Ohrring,
 Mütze,
+Murmeln,
 Murmel,
 Messer,
 Lupe,
@@ -1002,28 +1046,35 @@ Laterne,
 Kugel,
 Krug,
 Kristall,
+Kreisel,
 Kräuterbündel,
 Korb,
 Koffer,
 Kochtopf,
+Knetgummi,
 Kleber,
 Kissen,
 Kerze,
 Karte,
 Kamm,
+Jo-Jo,
 Hut,
+Hula-Hoop-Reifen,
 Handschuh,
 Gürtel,
+Gummiband,
 Glasperle,
 Giesskanne,
 Gemüse,
 Gabel,
 Frucht,
+Flügel,
 Flossen,
 Feuerstein,
 Fernrohr,
 Feder,
 Fallschirm,
+Fadenspiel,
 Elixier,
 Buch,
 Brosche,
@@ -1033,6 +1084,7 @@ Bleistift,
 Blatt,
 Beutel,
 Becher,
+Ball,
 Amulett,
 Ahle
 </p>
@@ -1040,7 +1092,7 @@ Ahle
 <h2>Aktion</h2>
 
 <ul>
-<li>Einerseits eine Aktion die zurzeit von jemandem oder etwas aufgeführt wird.</li>
+<li>Einerseits eine Aktion die zurzeit von etwas durchgeführt wird.</li>
 <li>Eine Tätigkeit, mit der sich das Tier am liebsten beschäftigt und den Tag damit verbringt. Oder aber einfach nur ein Hobby welches das Tier manchmal gerne macht.
 	<ul>
 	<li>heilen: Pflegt und kümmert sich um alle die krank sind.</li>
@@ -1497,9 +1549,11 @@ Eigenständiges Haar,
 Albino
 </p>
 
-<h2>Persönliches Ziel</h2>
+<h2>Ziel</h2>
 
-<p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie kann man auch daraus etwas erfinden.</p>
+<p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie könnt auch ihr daraus etwas erfinden.</p>
+
+<p>Ziel kann verschieden interpretiert werden z.B.: Teilziel einer Gruppenaufgabe, persönliches Ziel eines Tieres, ...</p>
 
 <ul>
 <li>Auftrag reparieren: Der Brief der übermittelt werden sollte ist zerrissen und muss wieder repariert werden.</li>
@@ -1528,8 +1582,10 @@ Tier,
 Sturm,
 Seltenes,
 Schuld,
+Schneeflocke,
 Schatz,
 Ruf,
+Rennen,
 Portal,
 Pflanze,
 Ort,
@@ -1541,6 +1597,7 @@ Legende,
 Krankheit,
 Instrument,
 Identität,
+Heilmittel,
 Gruppe,
 Gilde,
 Gewässer,
@@ -1559,6 +1616,7 @@ Botschafter,
 Bibliothek,
 Auftrag,
 Angst
+Nordlichter
 </p>
 
 <p class="liste" data-table="ziel-verb">
@@ -1566,7 +1624,7 @@ verstecken,
 vereinen,
 verbessern,
 überqueren,
-überlisten,
+über5n,
 tauschen,
 sprechen,
 sein,
@@ -1580,6 +1638,7 @@ imitieren,
 herausfinden,
 heilen,
 gründen,
+gewinnen,
 folgen,
 fliehen,
 finden,
@@ -1599,79 +1658,115 @@ bauen,
 anlegen
 </p>
 
-<h2>Wendung</h2>
+<h2>Herausforderung</h2>
 
-<button id="wendung-generieren">Würfeln 🎲</button>
+<button id="herausforderung-generieren">Würfeln 🎲</button>
 
-<p id="wendung-ausgabe" class="tabellen-ausgabe"></p>
+<p id="herausforderung-ausgabe" class="tabellen-ausgabe"></p>
 
-<p class="liste" data-table="wendung">
-Unerwartete Gefühle entflammen,
+<p class="liste" data-table="herausforderung">
+Unerwartete Gefühle,
 Unbekannte Sprache,
-Jemand wird verletzt,
-Jemand wacht mit fremden Erinnerungen auf aber wem gehören diese Gedanken?,
-Jemand verschwundenes kehrt zurück,
-Jemand verschwindet,
-Jemand verliebt sich,
-Jemand hört Stimmen die niemand sonst hört,
-Jemand findet eine Höhle mit Malereien,
+Etwas zeigt Kindheitserinnerungen.,
+Etwas wird verletzt,
+Etwas wacht mit fremden Erinnerungen auf aber wem gehören diese Gedanken?,
+Etwas verschwundenes kehrt zurück,
 Etwas verschwindet,
+Etwas vergrössert Kleinigkeiten und verkleinert Wichtiges,
 Etwas läuft rückwärts,
+Etwas hört Stimmen die sonst nicht gehört werden,
+Etwas findet eine Höhle mit Malereien,
 Etwas beginnt zu sprechen,
 Etwas aussergewöhnliches wird entdeckt,
 Es ist zu spät,
 Es ist zu früh,
 Eine wahre Identität wird enthüllt,
 Eine Reise beginnt,
+Eine Prophezeiung war falsch - absichtlich,
+Eine Prophezeiung war falsch,
 Eine Prophezeiung erfüllt sich,
 Eine neue Liebe beginnt,
-Eine Naturkatastrophe trifft ein,
+Eine Naturkatastrophe,
 Eine lange Reise endet,
-Eine Karte wird gefunden,
-Eine Gefahr taucht auf,
+Eine Karte zeigt keinen Ort,
+Eine Karte taucht auf,
+Eine Gefahr,
 Eine falsche Identität wird aufgedeckt,
+Eine falsche Annahme falsch,
 Eine Expedition stösst auf eine unberührte Gruppe,
-Eine Erinnerung kehrt zurück,
+Eine Erinnerung,
 Eine Entscheidung muss getroffen werden,
-Eine Annahme erweist sich als falsch,
 Eine alte Wunde wird wieder aufgerissen,
 Ein Wunder geschieht,
 Ein Wettkampf beginnt,
 Ein Unfall verändert alles,
 Ein Traum wird zur Realität,
+Ein Tier zeigt eine alternative Zukunft,
+Ein Tier verlangt ein Lachen als Eintritt,
 Ein Schatz wird gefunden,
 Ein Rätsel muss gelöst werden,
 Ein Portal öffnet sich,
 Ein Meteorit verändert die Landschaft,
+Ein Lebewesen wird von etwas besessen,
+Ein Lebewesen wechselt die Seiten,
+Ein Lebewesen verschwindet spurlos,
+Ein Lebewesen verliebt sich,
+Ein Lebewesen trifft sein zukünftiges Ich,
+Ein Lebewesen opfert sich,
+Ein Lebewesen macht etwas grossartiges,
+Ein Lebewesen hat eine gespaltene Persönlichkeit,
+Ein Lebewesen findet Erlösung,
+Ein Lebewesen erzählt nur die halbe Wahrheit,
+Ein Lebewesen erleidet einen Nervenzusammenbruch,
 Ein Kind wird geboren,
 Ein Kind sieht Dinge die Erwachsene nicht sehen können,
 Ein Geheimnis wird enthüllt,
 Ein falscher Verdacht entsteht,
 Ein Dorf verschwindet über Nacht,
 Ein Doppelgänger taucht auf,
-Ein Charakter wird von etwas besessen,
-Ein Charakter wechselt die Seiten,
-Ein Charakter verschwindet spurlos,
-Ein Charakter trifft sein zukünftiges Ich,
-Ein Charakter opfert sich,
-Ein Charakter macht etwas grossartiges,
-Ein Charakter hat eine gespaltene Persönlichkeit,
-Ein Charakter findet Erlösung,
-Ein Charakter erleidet einen Nervenzusammenbruch,
-Ein Bündnis wird geschlossen,
+Ein Bündnis,
 Die Zeit scheint still zu stehen,
 Die Welt verändert sich,
 Die war nur eine Illusion,
-Die Prophezeiung war falsch - absichtlich,
-Die Prophezeiung war falsch,
 Die Magie verschwindet plötzlich,
 Die letzte Seite des Buches fehlt,
-Die Karte zeigt keinen Ort,
 Die Gesetze der Physik brechen zusammen,
 Die Geschichte wiederholt sich,
 Die Erinnerungen waren falsch,
 Das ist verzaubert,
 Alles war nur ein Traum ... oder doch nicht?
+Spiegelt die innersten Ängste
+</p>
+
+<h2>Geschichte</h2>
+
+<button id="geschichte-generieren">Würfeln 🎲</button>
+
+<p id="geschichte-ausgabe" class="tabellen-ausgabe"></p>
+
+<h2>Ende</h2>
+
+<button id="ende-generieren">Würfeln 🎲</button>
+
+<p id="ende-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="ende">
+Nichts wird mehr sein wie vorher,
+Eine Figur gibt etwas unersetzliches auf,
+Ein mysteriöse Geschenk wird überbracht,
+Ein Geheimnis wird gelüftet,
+Die Vorhersage stimmt,
+Die Geschichte ender in einer Frage,
+Die Figuren hinterallen etwas für die Zukunft,
+die Aufgabe hatte einen anderen Sinn,
+Der Kreis schliesst sich,
+Das Abenteuer ist vorbei,
+Alles war anders als gedacht,
+Alles scheint gut,
+Alle kehren glücklich zu ihrem Zuhause zurück,
+Aber nicht so wie alle dachten,
+Aber etwas neues beginnt,
+Aber eine kleine Aufgabe wartet noch
 </p>
 
 <h2>Essen</h2>
@@ -1681,6 +1776,7 @@ Alles war nur ein Traum ... oder doch nicht?
 <p id="essen-ausgabe" class="tabellen-ausgabe"></p>
 
 <p class="liste" data-table="essen">
+Zwiebel,
 Zucker,
 Zucchini,
 Trauben,
@@ -1689,6 +1785,7 @@ Tomate,
 Teig,
 Taco,
 Süsskartoffel,
+Suppe,
 Spinat,
 Spaghetti,
 Sorbet,
@@ -1701,6 +1798,7 @@ Puderzucker,
 Pudding,
 Pommes Frites,
 Pizza,
+Pilze,
 Pesto,
 Paprika,
 Orange,
@@ -1715,6 +1813,7 @@ Mango,
 Linsen,
 Kuchen,
 Krapfen,
+Knoblauch,
 Kiwi,
 Ketchup,
 Kaugummi,
@@ -1722,9 +1821,11 @@ Kartoffel,
 Karotte,
 Hummus,
 Himbeere,
+Haferflocken,
 Gurke,
 Gemüse-Bouillon,
 Gelee,
+Gazpacho (Kalte Suppe),
 Frühlingsrollen,
 Falafel,
 Fajita,
@@ -1778,27 +1879,20 @@ Violett,
 Türkis,
 Schwarz,
 Rot,
+Regenbogen,
 Pink,
 Orange,
 Lila,
+Hell,
 Grün,
 Grau,
 Gelb,
 Durchsichtig,
+Dunkel,
+Bunt,
 Braun,
 Blau
 </p>
-
-
-<!--
-
-<h2>Geschichte</h2>
-
-<button id="geschichte-generieren">Würfeln 🎲</button>
-
-<p id="geschichte-ausgabe" class="tabellen-ausgabe"></p>
-
--->
 
 <!--
 

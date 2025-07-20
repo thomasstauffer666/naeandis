@@ -156,6 +156,8 @@ nav ul {
 	nav {
 		position: fixed;
 		width: 15rem;
+		overflow-y: auto;
+		max-height: calc(100vh - 6rem - 1rem);
 	}
 }
 
@@ -245,6 +247,18 @@ nav ul {
 }
 
 .aktion {
+	border-radius: 0.5rem;
+	color: #e90;
+	background-color: #fec;
+	padding: 0.5rem;
+}
+
+.tipp:before {
+	content: '💡 ';
+}
+
+.tipp {
+	font-style: italic;
 	border-radius: 0.5rem;
 	color: #e90;
 	background-color: #fec;
