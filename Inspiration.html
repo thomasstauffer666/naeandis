@@ -73,7 +73,7 @@ function mainTabellen() {
 		], [10, 3, 1]);
 	}
 
-	function geschichteGenerieren() {
+	function abenteuerGenerieren() {
 		const ort = t('ort-nomen', 'gebaeude') + ' ' + t('ort-adjektiv');
 		const schluesslfigur = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit') + ', ' + t('aussehen');
 		const aufgabe = t('ziel-nomen') + ' ' + t('ziel-verb');
@@ -84,8 +84,8 @@ function mainTabellen() {
 		const hilfe = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
 		const herausforderung2 = t('herausforderung');
 		const ende = t('ende');
-		const geschichte = `Ort: ${ort}\nSchlüsselfigur: ${schluesslfigur}\nAufgabe: ${aufgabe}\nBegleitung 1: ${begleitung1}\nBegleitung 2: ${begleitung2}\nGegenstand: ${gegenstand}\nErste Herausforderung: ${herausforderung1}\nUnerwartete Hilfe: ${hilfe}\nZweite Herausforderung: ${herausforderung2}\nEnde: ${ende}`;
-		return geschichte;
+		const abenteuer = `Ort: ${ort}\nSchlüsselfigur: ${schluesslfigur}\nAufgabe: ${aufgabe}\nBegleitung 1: ${begleitung1}\nBegleitung 2: ${begleitung2}\nGegenstand: ${gegenstand}\nErste Herausforderung: ${herausforderung1}\nUnerwartete Hilfe: ${hilfe}\nZweite Herausforderung: ${herausforderung2}\nEnde: ${ende}`;
+		return abenteuer;
 	}
 
 	const generatoren = {
@@ -105,7 +105,7 @@ function mainTabellen() {
 		'essen': [5, () => t('essen')],
 		'getraenk': [5, () => t('getraenk')],
 		'farbe': [5, () => farbeGenerieren()],
-		'geschichte': [1, geschichteGenerieren],
+		'abenteuer': [1, abenteuerGenerieren],
 	};
 
 	Object.entries(generatoren).forEach(([name, [repeat, entryCallable]]) => {
@@ -859,6 +859,12 @@ beseelt,
 beschützt
 </p>
 
+<!--
+
+- Ortsname (Inspiration Ironsworn?)
+
+-->
+
 <h2>Gebäude</h2>
 
 <button id="gebaeude-generieren">Würfeln 🎲</button>
@@ -884,26 +890,26 @@ Pavillon,
 Observatorium,
 Markthalle,
 Leuchtturm,
-Labayrinth,
+Labyrinth,
+Kräutergarten,
 Kornspeicher,
 Kloster,
 Keller,
 Katakomben,
-Kärutergarten,
 Kapelle (Andachtsraum),
 Hügelgrab,
 Holzsteg,
 Höhle,
+Halle,
 Glockenturm,
 Glaswerkstatt,
 Gärtnerei,
 Brunnen,
 Brücke,
 Bibliothek,
-Bibliotek,
 Baum-Haus,
 Bahnhof,
-Äquadukt
+Aquädukt
 </p>
 
 <h2>Sinn</h2>
@@ -1059,7 +1065,7 @@ Karte,
 Kamm,
 Jo-Jo,
 Hut,
-Hula-Hoop-Reifen,
+Hula Hoop Reifen,
 Handschuh,
 Gürtel,
 Gummiband,
@@ -1196,6 +1202,7 @@ wandern,
 verzaubern,
 verwandeln,
 verstecken,
+vermitteln,
 untersuchen,
 trösten,
 träumen,
@@ -1205,13 +1212,16 @@ teilen,
 tauchen,
 tanzen,
 suchen,
+studieren,
 streicheln,
 spielen,
 singen,
 schwimmen,
+schreiben,
 schnitzen,
 schneiden,
 schminken,
+schlichten,
 sammeln,
 retten,
 reparieren,
@@ -1219,11 +1229,13 @@ rennen,
 reiten,
 reden,
 putzen,
+prophezeien,
 philosophieren,
 pflegen,
 pflanzen,
 nachahmen,
 musizieren,
+meditieren,
 malen,
 lesen,
 lernen,
@@ -1249,18 +1261,22 @@ experimentieren,
 erzählen,
 ernten,
 erforschen,
+entdecken,
 einpacken,
 blasen,
 bewachen,
 betreuen,
 beschwören,
+beschützen,
 beobachten,
+befrieden,
 bauen,
 basteln,
 balancieren,
 backen,
 auskundschaften,
-aufführen
+aufführen,
+arbeiten
 </p>
 
 <h2>Tier</h2>
@@ -1460,6 +1476,7 @@ mitfühlend,
 misstrauisch,
 loyal,
 liebevoll,
+liebenswürdig,
 leidenschaftlich,
 lebensfroh,
 künstlerisch,
@@ -1477,9 +1494,12 @@ harmonisch,
 grosszügig,
 gewissenhaft,
 gesellig,
+geschickt,
 gefühlvoll,
 geduldig,
+furchtlos,
 flexibel,
+feurig,
 fantasievoll,
 extrovertiert,
 erfahren,
@@ -1553,7 +1573,7 @@ Albino
 
 <p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie könnt auch ihr daraus etwas erfinden.</p>
 
-<p>Ziel kann verschieden interpretiert werden z.B.: Teilziel einer Gruppenaufgabe, persönliches Ziel eines Tieres, ...</p>
+<p>Ziel kann verschieden interpretiert werden z.B.: Teilziel einer Gruppenaufgabe, persönliches Ziel eines Tieres, die Motivation eines Lebewesens, ...</p>
 
 <ul>
 <li>Auftrag reparieren: Der Brief der übermittelt werden sollte ist zerrissen und muss wieder repariert werden.</li>
@@ -1572,37 +1592,54 @@ Albino
 <p class="liste" data-table="ziel-nomen">
 Zuhause,
 Wissen,
+Werkzeug,
 Wahrheit,
 Vorrat,
 Versprechen,
 Unterkunft,
 Umgebung,
+Tür,
+Tunnel,
+Treppe,
 Traum,
 Tier,
 Sturm,
+Stein,
+Statue,
 Seltenes,
 Schuld,
 Schneeflocke,
+Schild,
+Schiff,
 Schatz,
 Ruf,
 Rennen,
+Rätsel,
 Portal,
 Pflanze,
 Ort,
+Nordlichter,
 Natur,
 Name,
+Medizin,
+Maschine,
 Lied,
 Liebe,
 Legende,
 Krankheit,
+Kompass,
+Keller,
 Instrument,
+Insel,
 Identität,
 Heilmittel,
+Haus,
 Gruppe,
 Gilde,
 Gewässer,
 Gesundheit,
 Geschichte,
+Geschenk,
 Geist,
 Geheimnis,
 Geheimes,
@@ -1610,13 +1647,20 @@ Gegenstand,
 Gefahr,
 Freundschaft,
 Freiheit,
+Flagge,
 Fertigkeit,
+Erfindung,
+Entdeckung,
 Einzigartiges,
+Buch,
 Botschafter,
+Blume,
 Bibliothek,
+Behälter,
 Auftrag,
+Artefakt,
+Archive,
 Angst
-Nordlichter
 </p>
 
 <p class="liste" data-table="ziel-verb">
@@ -1624,7 +1668,6 @@ verstecken,
 vereinen,
 verbessern,
 überqueren,
-über5n,
 tauschen,
 sprechen,
 sein,
@@ -1738,11 +1781,11 @@ Alles war nur ein Traum ... oder doch nicht?
 Spiegelt die innersten Ängste
 </p>
 
-<h2>Geschichte</h2>
+<h2>Abenteuer</h2>
 
-<button id="geschichte-generieren">Würfeln 🎲</button>
+<button id="abenteuer-generieren">Würfeln 🎲</button>
 
-<p id="geschichte-ausgabe" class="tabellen-ausgabe"></p>
+<p id="abenteuer-ausgabe" class="tabellen-ausgabe"></p>
 
 <h2>Ende</h2>
 
@@ -1752,13 +1795,13 @@ Spiegelt die innersten Ängste
 
 <p class="liste" data-table="ende">
 Nichts wird mehr sein wie vorher,
+Es wird etwas für die Zukunft hinterlassen,
 Eine Figur gibt etwas unersetzliches auf,
 Ein mysteriöse Geschenk wird überbracht,
 Ein Geheimnis wird gelüftet,
 Die Vorhersage stimmt,
-Die Geschichte ender in einer Frage,
-Die Figuren hinterallen etwas für die Zukunft,
-die Aufgabe hatte einen anderen Sinn,
+Die Geschichte endet in einer Frage,
+Die Aufgabe hatte einen anderen Sinn,
 Der Kreis schliesst sich,
 Das Abenteuer ist vorbei,
 Alles war anders als gedacht,
@@ -1807,7 +1850,7 @@ Nudeln,
 Müsli,
 Mousse,
 Melone,
-Mayo,
+Mayonnaise,
 Marzipan,
 Mango,
 Linsen,
@@ -1819,7 +1862,7 @@ Ketchup,
 Kaugummi,
 Kartoffel,
 Karotte,
-Hummus,
+Humus,
 Himbeere,
 Haferflocken,
 Gurke,
@@ -1831,7 +1874,7 @@ Falafel,
 Fajita,
 Erdbeere,
 Eiscreme,
-Dauerlutscher (Schleckstengel),
+Dauerlutscher (Schleckstängel),
 Curry,
 Creme,
 Burrito,
@@ -1893,13 +1936,6 @@ Bunt,
 Braun,
 Blau
 </p>
-
-<!--
-
-- Ort/Stadtname: Tier, Historisch, Erstelltes, Landschaftsmerkmal, Altes Wort, Wetter, Jahreszeit, ...
-- Ort Hindernis
-
--->
 
 </div>
 
