@@ -31,12 +31,16 @@ function range(n) {
 	return [...Array(n).keys()];
 }
 
-function choose(array) {
-	const index = Math.floor(Math.random() * array.length);
-	return array[index];
+function unique(array) {
+    return [...new Set(array)];
 }
 
-function randomWeighted(items, weights) {
+function choose(items) {
+	const index = Math.floor(Math.random() * items.length);
+	return items[index];
+}
+
+function chooseWeighted(items, weights) {
 	const sum = weights.reduce((a, b) => a + b, 0);
 	const random = Math.random() * sum;
 	let cumulative = 0;
@@ -46,19 +50,19 @@ function randomWeighted(items, weights) {
 function mainTabellen() {
 	const tabellen = {};
 
-	// Nach Zufall von einer oder mehreren Tabellen auswählen
-	function t(...keys) {
-		return choose([].concat(...keys.map($ => tabellen[$])));
-	}
-
 	document.querySelectorAll('[data-table]').forEach(element => {
 		const key = element.dataset.table;
 		const value = element.textContent.split(',').map($ => $.trim()).filter($ => $.length > 0);
 		tabellen[key] = value;
 	});
 
+	// Nach Zufall von einer oder mehreren Tabellen auswählen
+	function t(...keys) {
+		return choose([].concat(...keys.map($ => tabellen[$])));
+	}
+
 	function nameGenerieren() {
-		const nachnameVorsilbe = randomWeighted([
+		const nachnameVorsilbe = chooseWeighted([
 			'',
 			t('name-nachnamen-vorsilbe').toLowerCase()
 		], [10, 3]);
@@ -66,7 +70,11 @@ function mainTabellen() {
 	}
 
 	function farbeGenerieren() {
-		return randomWeighted([
+		const nuance = chooseWeighted([
+			'',
+			t('farbe-nuance') + '-',
+		], [2, 1]);
+		return nuance + chooseWeighted([
 			t('farbe'),
 			t('farbe') + '-' + t('farbe'),
 			t('farbe') + '-' + t('farbe') + '-' + t('farbe'),
@@ -74,12 +82,12 @@ function mainTabellen() {
 	}
 
 	function abenteuerGenerieren() {
-		const ort = t('ort-nomen', 'gebaeude') + ' ' + t('ort-adjektiv');
+		const ort = t('ort-nomen', 'bauwerk') + ' ' + t('ort-adjektiv');
 		const schluesslfigur = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit') + ', ' + t('aussehen');
 		const aufgabe = t('ziel-nomen') + ' ' + t('ziel-verb');
 		const begleitung1 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
 		const begleitung2 = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
-		const gegenstand = t('gegenstand', 'instrument');
+		const gegenstand = t('gegenstand', 'gegenstand-bekleidung', 'instrument');
 		const herausforderung1 = t('herausforderung');
 		const hilfe = nameGenerieren() + ', ' + t('tier') + ', ' + t('persoenlichkeit');
 		const herausforderung2 = t('herausforderung');
@@ -88,29 +96,39 @@ function mainTabellen() {
 		return abenteuer;
 	}
 
+	function getraenkGenerieren() {
+		return chooseWeighted([
+			t('getraenk'),
+			t('pflanze-frucht') + '-' + t('getraenk'),
+			t('pflanze-kraut') + '-' + t('getraenk'),
+		], [1, 2, 1]);
+	}
+
 	const generatoren = {
 		'name': [5, nameGenerieren],
-		'ziel': [5, () => t('ziel-nomen') + ' ' + t('ziel-verb')],
+		'ziel': [5, () => t('ziel') + ' ' + t('aktion')],
 		'tier': [5, () => t('tier')],
+		'pflanze': [5, () => t('pflanze-baum', 'pflanze-gemuese', 'pflanze-frucht', 'pflanze-kraut', 'pflanze-busch', 'pflanze-blume')],
+		'stein': [5, () => t('stein')],
 		'ort': [5, () => t('ort-nomen') + ' ' + t('ort-adjektiv')],
 		'ende': [5, () => t('ende')],
-		'gebaeude': [5, () => t('gebaeude')],
+		'bauwerk': [5, () => t('bauwerk')],
 		'sinn': [5, () => t('sinn')],
 		'aktion': [5, () => t('aktion')],
-		'gegenstand': [5, () => t('gegenstand')],
+		'gegenstand': [5, () => t('gegenstand', 'gegenstand-bekleidung')],
 		'instrument': [5, () => t('instrument')],
 		'persoenlichkeit': [5, () => t('persoenlichkeit')],
 		'aussehen': [5, () => t('aussehen')],
 		'herausforderung': [5, () => t('herausforderung')],
-		'essen': [5, () => t('essen')],
-		'getraenk': [5, () => t('getraenk')],
-		'farbe': [5, () => farbeGenerieren()],
+		'essen': [5, () => t('pflanze-gemuese', 'pflanze-frucht', 'pflanze-kraut', 'essen')],
+		'getraenk': [5, getraenkGenerieren],
+		'farbe': [5, farbeGenerieren],
 		'abenteuer': [1, abenteuerGenerieren],
 	};
 
-	Object.entries(generatoren).forEach(([name, [repeat, entryCallable]]) => {
+	Object.entries(generatoren).forEach(([name, [repeat, callable]]) => {
 		function generate() {
-			const result = range(repeat).map($ => entryCallable()).join(', ');
+			const result = unique(range(repeat).map($ => callable())).join(', ');
 			document.getElementById(name + '-ausgabe').innerText = result;
 		}
 		document.getElementById(name + '-generieren').addEventListener('click', generate);
@@ -173,7 +191,7 @@ document.addEventListener('DOMContentLoaded', mainKarten);
 <button id="karten-wurf">Würfeln 🎲</button>
 <div id="karten-ausgabe" class="karten-ausgabe"></div>
 
-<h2>Namen</h2>
+<h2>Name</h2>
 
 <p>Die folgenden Namen bestehen jeweils aus einem Vornamen, einen oder mehreren Vorsilben und einer Nachsilbe. Natürlich dürft ihr auch diese Namen selber noch auseinandernehmen und anders wieder zusammensetzen:</p>
 
@@ -185,9 +203,9 @@ Zayd Nebellichtherz, Omar Regenbogenschweif, Noelle Sonnenpfote, Amara Sternenfl
 
 <p id="name-ausgabe" class="tabellen-ausgabe"></p>
 
-<h3>Vornamen</h3>
+<h3>Vorname</h3>
 
-<p class="liste" data-table="name-vornamen">
+<p class="liste" data-table="name-vornamen" data-spellcheck="false">
 Zoya,
 Zoltan,
 Zoe,
@@ -597,7 +615,7 @@ Ahmed,
 Aditi
 </p>
 
-<h3>Nachnamen</h3>
+<h3>Nachname</h3>
 
 <h4>Vorsilbe</h4>
 
@@ -624,12 +642,12 @@ Sprudel,
 Sonnen,
 Silber,
 See,
+Schneeflocken,
 Schnee,
 Schmuse,
 Schlürf,
 Schlummer,
 Schimmer,
-Scheeflocken,
 Schatten,
 Saphir,
 Sand,
@@ -781,30 +799,46 @@ Regenwald,
 Quelle,
 Pfad,
 Oase,
+Moräne,
 Moor,
 Mittelgebirge,
 Mangroven,
 Laubwald,
 Lagune,
 Küste,
+Kratersee,
+Krater,
 Korallenriff,
 Kliff,
 Hügel,
 Höhle,
 Hochgebirge,
 Hochebene,
+Halbinsel,
 Gletscher,
 Geysir,
 Flussdelta,
 Fluss,
 Fjord,
 Felsnadel,
+Feld,
+Eismeer,
+Eisberg,
 Ebene,
 Düne,
 Dickicht,
+Delta,
+Damm,
+Bucht,
 Brücke,
 Brandung,
+Binnensee,
+Berg,
+Bauwerk (➭ Bauwerk),
 Au,
+Atoll,
+Arktis,
+Archipel,
 Anomalie
 </p>
 
@@ -860,22 +894,22 @@ beschützt
 </p>
 
 <!--
-
+TODO
 - Ortsname (Inspiration Ironsworn?)
-
 -->
 
-<h2>Gebäude</h2>
+<h2>Bauwerk</h2>
 
-<button id="gebaeude-generieren">Würfeln 🎲</button>
+<button id="bauwerk-generieren">Würfeln 🎲</button>
 
-<p id="gebaeude-ausgabe" class="tabellen-ausgabe"></p>
+<p id="bauwerk-ausgabe" class="tabellen-ausgabe"></p>
 
-<p class="liste" data-table="gebaeude">
+<p class="liste" data-table="bauwerk">
 Wintergarten,
 Windmühle,
 Weberei,
 Turm,
+Tunnel,
 Treppe,
 Torbogen,
 Sternwarte,
@@ -914,7 +948,7 @@ Aquädukt
 
 <h2>Sinn</h2>
 
-<p>In Klammern ist beispielhaft jeweils ein einzelnes Tier angegeben dessen Sinn überdurchschnittlich gut ist.</p>
+<p>In Klammern ist beispielhaft jeweils ein einzelnes Tier angegeben dessen Sinn als Beispiel überdurchschnittlich gut ist.</p>
 
 <button id="sinn-generieren">Würfeln 🎲</button>
 
@@ -924,9 +958,9 @@ Aquädukt
 Zeit (Gans),
 Viele Farbrezeptoren (Garnelen),
 Vibration (Elefant),
-UV (Hamster),
+UV/Ultraviolett (Hamster),
 Ultraschall (Fledermaus),
-Temperatur (Mücken),
+Temperatur (Mücke),
 Tasten (Ratte),
 Sehen (Adler),
 Schwerkraft (Spinne),
@@ -939,8 +973,8 @@ Pheromon (Ameise),
 Muskelströme (Rochen),
 Magnetische Felder (Schildkröte),
 Luftfeuchtigkeit (Schnecke),
+IR/Infrarot (Mücke),
 Infraschall (Taube),
-Infrarot (Mücke),
 Hören (Grille),
 Gleichgewicht (Katze),
 Elektrische Felder (Hai),
@@ -957,6 +991,7 @@ Berührung (Affe)
 <p class="liste" data-table="instrument">
 Zither,
 Xylophon,
+Ukulele,
 Tuba,
 Trompete,
 Triangel,
@@ -967,6 +1002,7 @@ Rassel,
 Quitsche-Ente,
 Querflöte,
 Posaune,
+Piccolo,
 Pauke,
 Panflöte,
 Orgel,
@@ -999,31 +1035,66 @@ Akkordeon
 
 <p id="gegenstand-ausgabe" class="tabellen-ausgabe"></p>
 
+<p class="liste" data-table="gegenstand-bekleidung">
+Stiefel,
+Sonnenhut,
+Schwimmflügel,
+Ring,
+Regenschutz,
+Mütze,
+Kopftuch,
+Hut,
+Handschuh,
+Halstuch,
+Haarreif,
+Gurt,
+Fusskettchen,
+Flügel,
+Flossen,
+Diadem,
+Brosche,
+Amulett
+</p>
+
 <p class="liste" data-table="gegenstand">
 Zange,
+Würfelbecher,
 Würfel,
 Wind-Drache,
+Webrahmen,
+Wasserwaage,
+Waage,
 Verband,
+Umhang,
 Tuch,
 Trank,
 Trampolin,
+Töpferscheibe,
 Tintenfass,
 Tasche,
 Stoff-Puppe,
 Stift,
-Stiefel,
+Stelzen,
+Steckentier,
 Staubwedel,
 Stab,
 Springseil,
+Spielzeugboot,
+Spielkarten,
 Spiegel,
 Slinky (Schraubenfeder),
 Sichel,
 Sense,
+Senklot,
 Seil,
+Seifenblasen,
 Schwamm,
+Schraube,
+Schnur,
 Schnitzwerkzeug,
 Schlüssel,
 Schlitten,
+Schleifstein,
 Schlafmatte,
 Schirm,
 Schild,
@@ -1034,21 +1105,31 @@ Schale,
 Sanduhr,
 Samen,
 Salzstreuer,
+Säge,
 Rune,
 Rucksack,
-Ring,
 Pulver,
+Plüschtier,
+Pinzette,
+Pinsel,
 Pfeffermühle,
+Pedalo,
+Papierflieger,
 Ohrring,
-Mütze,
-Murmeln,
+Netz,
+Nadel,
 Murmel,
 Messer,
+Malkasten,
 Lupe,
+Luftballon,
 Löffel,
 Lineal,
 Leiter,
+Laufrad,
 Laterne,
+Lampion,
+Kugelbahn,
 Kugel,
 Krug,
 Kristall,
@@ -1061,29 +1142,41 @@ Knetgummi,
 Kleber,
 Kissen,
 Kerze,
+Kelle,
 Karte,
 Kamm,
+Kaleidoskop,
 Jo-Jo,
-Hut,
+Instrument (➭ Instrument),
 Hula Hoop Reifen,
-Handschuh,
-Gürtel,
+Holzfigur,
+Hammer,
 Gummiband,
+Glücksrad,
+Glocke,
 Glasperle,
 Giesskanne,
 Gemüse,
 Gabel,
+Füllfeder,
 Frucht,
-Flügel,
-Flossen,
+Flug-Drachen,
+Flagge,
+Fingerpuppe,
 Feuerstein,
 Fernrohr,
+Feile,
 Feder,
+Farbtopf,
+Farbstift,
 Fallschirm,
 Fadenspiel,
 Elixier,
+Eimer,
+Edelstein,
+Draht,
+Bumerang,
 Buch,
-Brosche,
 Brief,
 Bogen,
 Bleistift,
@@ -1091,192 +1184,7 @@ Blatt,
 Beutel,
 Becher,
 Ball,
-Amulett,
 Ahle
-</p>
-
-<h2>Aktion</h2>
-
-<ul>
-<li>Einerseits eine Aktion die zurzeit von etwas durchgeführt wird.</li>
-<li>Eine Tätigkeit, mit der sich das Tier am liebsten beschäftigt und den Tag damit verbringt. Oder aber einfach nur ein Hobby welches das Tier manchmal gerne macht.
-	<ul>
-	<li>heilen: Pflegt und kümmert sich um alle die krank sind.</li>
-	<li>tanzen: Tanzt gerne mit und vor Anderen und unterhaltet andere damit immer wieder.</li>
-	<li>lehren: Nimmt sich regelmässig Zeit um den kleineren etwas beizubringen.</li>
-	<li>freundlich sein: Hört anderen zu und bestärkt sie.</li>
-	</ul>
-</li>
-</ul>
-
-<button id="aktion-generieren">Würfeln 🎲</button>
-
-<p id="aktion-ausgabe" class="tabellen-ausgabe"></p>
-
-<!--
-zimmern (Tischlerin)
-zeichnen (Zeichnerin, Illustratorin)
-wünschen (Wunschfee, Beraterin)
-werfen (Postbotin)
-weben (Weberin, Textilgestalter)
-waschen (Wäscher, Putzmann)
-wandern (Wanderführer, Naturführer)
-verzaubern (Zauberin, Magierin)
-verwandeln (Schauspielerin, Verwandlungskünstlerin)
-verstecken (Kindergärtner)
-untersuchen (Ärztin, Forscherin, Detektivin)
-trösten (Therapeutin, Seelsorgerin, Pflegerin)
-träumen (Traumdeuter, Psychologe, Schlafforscherin, Hypnose-Spezialistin)
-transportieren (Fahrerin, Logistikerin)
-töpfern (Töpferin)
-teilen (Sozialarbeiterin)
-tauchen (Taucherin, Meeresbiologe)
-tanzen (Tänzerin, Tanzlehrer, Choreografin)
-suchen (Detektiv, Archäologin)
-streicheln (Tierpflegerin, Physiotherapeutin)
-spielen (Schauspieler, Musikerin, Spielzeug-Entwicklerin, Kindergärtnerin)
-singen (Sängerin, Gesangslehrer, Chorleiterin)
-schwimmen (Schwimmerin, Schwimmlehrerin, Rettungsschwimmerin)
-schnitzen (Schnitzerin, Holzbildhauerin)
-schneiden (Friseur, Schneider, Film-Schneiderin)
-schminken (Maskenbildner, Kosmetiker)
-sammeln (Sammlerin, Archivar)
-retten (Feuerwehrfrau, Notärztin, Rettungsschwimmerin)
-reparieren (Technikerin, Handwerkerin, Mechanikerin)
-rennen (Läuferin, Leichtathletin)
-reiten (Reiterin, Reitlehrer)
-reden (Rednerin, Moderatorin, Kommunikationstrainer)
-putzen (Putzmann, Hauswirtschafter)
-philosophieren (Philosophin, Dozentin)
-pflegen (Pfleger)
-pflanzen (Gärtner, Landwirtin, Botanikerin)
-nachahmen (Schauspielerin, Imitatorin)
-musizieren (Musiker, Instrumentalistin, Komponistin)
-malen (Malerin, Künstlerin, Kunsttherapeut, Tätowiererin)
-lesen (Vorleserin, Bibliothekar, Lektorin)
-lernen (Lehrer, Dozentin, Ausbilderin)
-lenken (Fahrerin, Pilotin, Kapitänin)
-lehren (Lehrerin, Professorin, Ausbilder)
-lächeln (Clownin)
-konstruieren (Ingenieurin, Konstrukteurin, Architektin)
-komponieren (Komponistin)
-kochen (Köchin, Hauswirtschafter, Ernährungswissenschaftler)
-kneten (Bäckerin, Konditorin, Töpferer)
-klettern (Kletterer, Bergführerin, Alpinistin)
-heilen (Ärztin, Heilpraktikerin, Therapeutin)
-handeln (Händler, Unternehmerin)
-graben (Archäologe, Gärtner, Bauarbeiterin)
-giessen (Giesserin, Gärtner)
-gedankenlesen (Mentalistin, Psychologin)
-freundlich sein (Sozialarbeiter)
-forschen (Forscher, Wissenschaftlerin)
-fliegen (Pilotin, Astronautin)
-färben (Färberin, Friseur, Textilgestalterin)
-falten (Origami-Künstlerin, Packer)
-experimentieren (Wissenschaftlerin, Laborant, Chemikerin)
-erzählen (Geschichtenerzählerin, Autorin, Journalist)
-ernten (Gärtner, Winzerin)
-erforschen (Forscher, Entdeckerin, Wissenschaftlerin)
-einpacken (Packerin, Logistikerin)
-blasen (Glasbläserin, Blasinstrumente-Musikerin)
-bewachen (Wachfrau)
-betreuen (Betreuerin, Sozialarbeiter, Pflegekraft)
-beschwören (Magierin, Zauberer)
-beobachten (Beobachterin, Forscher, Detektivin)
-bauen (Bauarbeiterin, Architekt, Ingenieurin)
-basteln (Bastler, Kunsthandwerkerin, Heimwerkerin)
-balancieren (Artistin, Tänzer, Physiotherapeutin)
-backen (Bäckerin, Konditor, Hauswirtschafterin)
-auskundschaften (Kundschafterin)
-aufführen (Schauspielerin, Tänzer, Musikerin
--->
-
-<p class="liste" data-table="aktion">
-zimmern,
-zeichnen,
-wünschen,
-werfen,
-weben,
-waschen,
-wandern,
-verzaubern,
-verwandeln,
-verstecken,
-vermitteln,
-untersuchen,
-trösten,
-träumen,
-transportieren,
-töpfern,
-teilen,
-tauchen,
-tanzen,
-suchen,
-studieren,
-streicheln,
-spielen,
-singen,
-schwimmen,
-schreiben,
-schnitzen,
-schneiden,
-schminken,
-schlichten,
-sammeln,
-retten,
-reparieren,
-rennen,
-reiten,
-reden,
-putzen,
-prophezeien,
-philosophieren,
-pflegen,
-pflanzen,
-nachahmen,
-musizieren,
-meditieren,
-malen,
-lesen,
-lernen,
-lenken,
-lehren,
-lächeln,
-konstruieren,
-komponieren,
-kochen,
-kneten,
-klettern,
-heilen,
-handeln,
-graben,
-giessen,
-gedankenlesen,
-freundlich sein,
-forschen,
-fliegen,
-färben,
-falten,
-experimentieren,
-erzählen,
-ernten,
-erforschen,
-entdecken,
-einpacken,
-blasen,
-bewachen,
-betreuen,
-beschwören,
-beschützen,
-beobachten,
-befrieden,
-bauen,
-basteln,
-balancieren,
-backen,
-auskundschaften,
-aufführen,
-arbeiten
 </p>
 
 <h2>Tier</h2>
@@ -1299,6 +1207,8 @@ Tintenfisch,
 Tiger,
 Tiefseeangler,
 Tausendfüssler,
+Taube,
+Strauss,
 Stinktier,
 Steinbock,
 Stachelschwein,
@@ -1308,7 +1218,9 @@ Skorpion,
 Siebenschläfer,
 Seidenspinner,
 Seestern,
+Seeschwalbe,
 Seepferd,
+Seeigel,
 Seehund,
 Schwertfisch,
 Schwein,
@@ -1317,6 +1229,7 @@ Schwamm,
 Schwalbe,
 Schnecke,
 Schnabeltier,
+Schmetterling,
 Schlange,
 Schildkröte,
 Schaf,
@@ -1327,10 +1240,12 @@ Ren,
 Reiher,
 Reh,
 Raupe,
+Ratte,
 Rabe,
 Qualle,
 Python,
 Pinguin,
+Pferd,
 Pfau,
 Pelikan,
 Papagei,
@@ -1347,13 +1262,16 @@ Nachtigall,
 Muschel,
 Mücke,
 Maus,
+Maulwurf,
 Marder,
 Luchs,
 Löwe,
 Libelle,
+Leopard,
 Lemming,
 Laus,
 Kuh,
+Küchenschabe,
 Krokodil,
 Kranich,
 Krähe,
@@ -1368,18 +1286,22 @@ Känguru,
 Kamel,
 Kakadu,
 Käfer,
+Jaguar,
 Iltis,
 Igel,
+Hyäne,
 Hund,
 Huhn,
 Hirsch,
 Heuschrecke,
 Hase,
+Hamster,
 Hai,
 Gürteltier,
 Grille,
 Gottesanbeterin,
 Glühwürmchen,
+Giraffengazelle,
 Giraffe,
 Gepard,
 Geier,
@@ -1388,6 +1310,7 @@ Gazelle,
 Gans,
 Fuchs,
 Frosch,
+Forelle,
 Fledermaus,
 Faultier,
 Falke,
@@ -1399,6 +1322,7 @@ Elefant,
 Eisbär,
 Eichhörnchen,
 Eichelhäher,
+Dugong,
 Dromedar,
 Delphin,
 Dachs,
@@ -1407,9 +1331,12 @@ Büffel,
 Biene,
 Biber,
 Bär,
+Axolotl,
 Anemone,
+Ameisenlöwe,
 Ameisenbär,
 Ameise,
+Alpaka,
 Affe,
 Adler,
 Aal
@@ -1569,11 +1496,467 @@ Eigenständiges Haar,
 Albino
 </p>
 
+<h2>Pflanze</h2>
+
+<button id="pflanze-generieren">Würfeln 🎲</button>
+
+<p id="pflanze-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="pflanze-baum" data-spellcheck="false">
+Zypresse,
+Zeder,
+Weide,
+Ulme
+Ginko,
+Tanne,
+Pappel,
+Linde,
+Lärche,
+Kiefer,
+Kastanie,
+Fichte,
+Esche,
+Erle,
+Eiche,
+Eibe,
+Buche,
+Birke,
+Ahorn
+</p>
+
+<p class="liste" data-table="pflanze-gemuese">
+Zwiebel,
+Zucchini,
+Tomate,
+Süssmais,
+Süsskartoffel,
+Steinpilz,
+Spinat,
+Spargel,
+Sojasprosse,
+Sellerie,
+Rübe,
+Rosenkohl,
+Peperoni,
+Paprika,
+Olive,
+Okra,
+Meerrettich,
+Linse,
+Lauch,
+Kürbis,
+Kopfsalat,
+Kohlrabi,
+Knoblauch,
+Kichererbse,
+Kartoffel,
+Karotte,
+Gurke,
+Frühlingszwiebel,
+Fenchel,
+Erbse,
+Champignons,
+Brokkoli,
+Bohne,
+Blumenkohl,
+Bambussprosse,
+Avocado,
+Aubergine,
+Artischocke
+</p>
+
+<p class="liste" data-table="pflanze-frucht">
+Zuckerrübe,
+Zitrone,
+Weissdornbeere,
+Walnuss,
+Traube,
+Sternfrucht/Karambole,
+Stachelbeere,
+Schlehe,
+Sanddorn,
+Rhabarber,
+Quitte,
+Preiselbeere,
+Pflaume,
+Pfirsich,
+Papaya,
+Orange,
+Nektarine,
+Moosbeere (Cranberry),
+Mirabelle,
+Melone,
+Mango,
+Mandel,
+Mandarine,
+Macadamianuss,
+Litschi/Rambutan,
+Limette,
+Kokosnuss,
+Kiwi,
+Kirsche,
+Johannisbeere,
+Holunderbeere,
+Himbeere,
+Haselnuss,
+Hagebutte,
+Grapefruit,
+Granatapfel,
+Feige,
+Erdnuss,
+Erdbeere,
+Durian,
+Dattel,
+Brombeere,
+Blaubeere,
+Birne,
+Banane,
+Aprikose,
+Apfelbeere (Aronia),
+Apfel,
+Ananas
+</p>
+
+<p class="liste" data-table="pflanze-kraut" data-spellcheck="false">
+Zitronenmelisse,
+Thymian,
+Schnittlauch,
+Schafgarbe,
+Sauerampfer,
+Salbei,
+Rosmarin,
+Pfefferminze,
+Petersilie,
+Oregano,
+Minze,
+Mate,
+Majoran,
+Lorbeer,
+Liebstöckel,
+Lavendelblüten,
+Kresse,
+Krauseminze,
+Koriander,
+Kerbel,
+Kapuzinerkresse,
+Johannisbeerblüte,
+Holunderblüte,
+Himbeerblatt,
+Giersch,
+Eisenkrauft/Verbene,
+Dill,
+Brombeerblatt,
+Brennnessel,
+Bohnenkraut,
+Beifuss,
+Basilikum,
+Bärlauch,
+Akazienblüte
+</p>
+
+<p class="liste" data-table="pflanze-busch" data-spellcheck="false">
+Weigelie,
+Stechpalme,
+Schneeball,
+Rhododendron,
+Oleander,
+Kolkwitzie,
+Jasmin,
+Hortensie,
+Hibiskus,
+Goldregen,
+Flieder
+</p>
+
+<p class="liste" data-table="pflanze-blume" data-spellcheck="false">
+Weihnachtsstern,
+Vergissmeinnicht,
+Tulpe,
+Stiefmütterchen,
+Schneeglöckchen,
+Rose,
+Primel,
+Petunie,
+Osterglocke,
+Orchidee,
+Narzisse,
+Märzenbecher,
+Margerite,
+Maiglöckchen,
+Lilie,
+Krokus,
+Kornblume,
+Hyazinthe,
+Gladiole,
+Geranie,
+Gänseblümchen,
+Fuchsie,
+Fingerhut,
+Eisenhut,
+Efeu,
+Dahlie,
+Bogenhanf,
+Begonie,
+Amaryllis,
+Aloe Vera
+</p>
+
+<h2>Stein</h2>
+
+<button id="stein-generieren">Würfeln 🎲</button>
+
+<p id="stein-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="stein" data-spellcheck="false">
+Zirkon,
+Turmalin,
+Topas,
+Tigerauge,
+Tansanit,
+Smaragd,
+Saphir,
+Rubin,
+Rosenquarz,
+Perle,
+Opal,
+Onyx,
+Mondstein,
+Lapislazuli,
+Jade,
+Granat,
+Diamant,
+Citrin,
+Bernstein,
+Bergkristall,
+Aquamarin,
+Amethyst,
+Alexandrit,
+Achat
+</p>
+
+<h2>Aktion</h2>
+
+<ul>
+<li>Einerseits eine Aktion die zurzeit von etwas durchgeführt wird.</li>
+<li>Eine Tätigkeit, mit der sich ein Tier am liebsten beschäftigt und den Tag damit verbringt. Oder aber einfach nur ein Hobby welches das Tier manchmal gerne macht.
+	<ul>
+	<li>heilen: Pflegt und kümmert sich um alle die krank sind.</li>
+	<li>tanzen: Tanzt gerne mit und vor Anderen und unterhaltet andere damit immer wieder.</li>
+	<li>lehren: Nimmt sich regelmässig Zeit um den kleineren etwas beizubringen.</li>
+	<li>freundlich sein: Hört anderen zu und bestärkt sie.</li>
+	</ul>
+</li>
+</ul>
+
+<button id="aktion-generieren">Würfeln 🎲</button>
+
+<p id="aktion-ausgabe" class="tabellen-ausgabe"></p>
+
+<!--
+TODO 2 Liste integrieren? Beispeiele?
+
+zimmern (Tischlerin)
+zeichnen (Zeichnerin, Illustratorin)
+wünschen (Wunschfee, Beraterin)
+werfen (Postbotin)
+weben (Weberin, Textilgestalter)
+waschen (Wäscher, Putzmann)
+wandern (Wanderführer, Naturführer)
+verzaubern (Zauberin, Magierin)
+verwandeln (Schauspielerin, Verwandlungskünstlerin)
+verstecken (Kindergärtner)
+untersuchen (Ärztin, Forscherin, Detektivin)
+trösten (Therapeutin, Seelsorgerin, Pflegerin)
+träumen (Traumdeuter, Psychologe, Schlafforscherin, Hypnose-Spezialistin)
+transportieren (Fahrerin, Logistikerin)
+töpfern (Töpferin)
+teilen (Sozialarbeiterin)
+tauchen (Taucherin, Meeresbiologe)
+tanzen (Tänzerin, Tanzlehrer, Choreografin)
+suchen (Detektiv, Archäologin)
+streicheln (Tierpflegerin, Physiotherapeutin)
+spielen (Schauspieler, Musikerin, Spielzeug-Entwicklerin, Kindergärtnerin)
+singen (Sängerin, Gesangslehrer, Chorleiterin)
+schwimmen (Schwimmerin, Schwimmlehrerin, Rettungsschwimmerin)
+schnitzen (Schnitzerin, Holzbildhauerin)
+schneiden (Friseur, Schneider, Film-Schneiderin)
+schminken (Maskenbildner, Kosmetiker)
+sammeln (Sammlerin, Archivar)
+retten (Feuerwehrfrau, Notärztin, Rettungsschwimmerin)
+reparieren (Technikerin, Handwerkerin, Mechanikerin)
+rennen (Läuferin, Leichtathletin)
+reiten (Reiterin, Reitlehrer)
+reden (Rednerin, Moderatorin, Kommunikationstrainer)
+putzen (Putzmann, Hauswirtschafter)
+philosophieren (Philosophin, Dozentin)
+pflegen (Pfleger)
+pflanzen (Gärtner, Landwirtin, Botanikerin)
+nachahmen (Schauspielerin, Imitatorin)
+musizieren (Musiker, Instrumentalistin, Komponistin)
+malen (Malerin, Künstlerin, Kunsttherapeut, Tätowiererin)
+lesen (Vorleserin, Bibliothekar, Lektorin)
+lernen (Lehrer, Dozentin, Ausbilderin)
+lenken (Fahrerin, Pilotin, Kapitänin)
+lehren (Lehrerin, Professorin, Ausbilder)
+lächeln (Clownin)
+konstruieren (Ingenieurin, Konstrukteurin, Architektin)
+komponieren (Komponistin)
+kochen (Köchin, Hauswirtschafter, Ernährungswissenschaftler)
+kneten (Bäckerin, Konditorin, Töpferer)
+klettern (Kletterer, Bergführerin, Alpinistin)
+heilen (Ärztin, Heilpraktikerin, Therapeutin)
+handeln (Händler, Unternehmerin)
+graben (Archäologe, Gärtner, Bauarbeiterin)
+giessen (Giesserin, Gärtner)
+gedankenlesen (Mentalistin, Psychologin)
+freundlich sein (Sozialarbeiter)
+forschen (Forscher, Wissenschaftlerin)
+fliegen (Pilotin, Astronautin)
+färben (Färberin, Friseur, Textilgestalterin)
+falten (Origami-Künstlerin, Packer)
+experimentieren (Wissenschaftlerin, Laborant, Chemikerin)
+erzählen (Geschichtenerzählerin, Autorin, Journalist)
+ernten (Gärtner, Winzerin)
+erforschen (Forscher, Entdeckerin, Wissenschaftlerin)
+einpacken (Packerin, Logistikerin)
+blasen (Glasbläserin, Blasinstrumente-Musikerin)
+bewachen (Wachfrau)
+betreuen (Betreuerin, Sozialarbeiter, Pflegekraft)
+beschwören (Magierin, Zauberer)
+beobachten (Beobachterin, Forscher, Detektivin)
+bauen (Bauarbeiterin, Architekt, Ingenieurin)
+basteln (Bastler, Kunsthandwerkerin, Heimwerkerin)
+balancieren (Artistin, Tänzer, Physiotherapeutin)
+backen (Bäckerin, Konditor, Hauswirtschafterin)
+auskundschaften (Kundschafterin)
+aufführen (Schauspielerin, Tänzer, Musikerin)
+-->
+
+<p class="liste" data-table="aktion">
+zimmern,
+zeichnen,
+wünschen,
+werfen,
+weben,
+waschen,
+wandern,
+verzaubern,
+verwandeln,
+verstecken,
+vermitteln,
+vereinen,
+verbessern,
+untersuchen,
+überqueren,
+trösten,
+trinken,
+träumen,
+transportieren,
+töpfern,
+teilen,
+tauschen,
+tauchen,
+tanzen,
+suchen,
+studieren,
+streicheln,
+sprechen,
+spielen,
+singen,
+sein,
+schwimmen,
+schreiben,
+schnitzen,
+schneiden,
+schminken,
+schlichten,
+sammeln,
+retten,
+reparieren,
+rennen,
+reiten,
+reisen,
+reden,
+putzen,
+prophezeien,
+philosophieren,
+pflegen,
+pflanzen,
+nachahmen,
+musizieren,
+meditieren,
+malen,
+lesen,
+lernen,
+lenken,
+lehren,
+lächeln,
+konstruieren,
+komponieren,
+kochen,
+kneten,
+klettern,
+kennenlernen,
+imitieren,
+hören,
+herausfinden,
+heilen,
+handeln,
+gründen,
+graben,
+giessen,
+gewinnen,
+gedankenlesen,
+geben,
+freundlich sein,
+fragen,
+forschen,
+folgen,
+fliehen,
+fliegen,
+finden,
+färben,
+falten,
+experimentieren,
+essen,
+erzählen,
+erstellen,
+ernten,
+erlangen,
+erklimmen,
+erfüllen,
+erforschen,
+entschlüsseln,
+entdecken,
+einpacken,
+davonschwimmen,
+davonrennen,
+davonfliegen,
+blasen,
+bewachen,
+betreuen,
+beschwören,
+beschützen,
+beobachten,
+begleichen,
+befrieden,
+bauen,
+basteln,
+balancieren,
+backen,
+auskundschaften,
+aufführen,
+arbeiten,
+anlegen
+</p>
+
+<!-- TODO - Besser mit Aktion abgleichen?-->
+
 <h2>Ziel</h2>
 
-<p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie könnt auch ihr daraus etwas erfinden.</p>
-
 <p>Ziel kann verschieden interpretiert werden z.B.: Teilziel einer Gruppenaufgabe, persönliches Ziel eines Tieres, die Motivation eines Lebewesens, ...</p>
+
+<p>Nicht alle Varianten ergeben im ersten Moment gleich Sinn, aber mit etwas Fantasie könnt auch ihr daraus etwas erfinden.</p>
 
 <ul>
 <li>Auftrag reparieren: Der Brief der übermittelt werden sollte ist zerrissen und muss wieder repariert werden.</li>
@@ -1589,22 +1972,19 @@ Albino
 
 <p id="ziel-ausgabe" class="tabellen-ausgabe"></p>
 
-<p class="liste" data-table="ziel-nomen">
+<p class="liste" data-table="ziel">
 Zuhause,
 Wissen,
-Werkzeug,
 Wahrheit,
 Vorrat,
 Versprechen,
 Unterkunft,
 Umgebung,
 Tür,
-Tunnel,
-Treppe,
 Traum,
-Tier,
+Tier (➭ Tier),
 Sturm,
-Stein,
+Stein (➭ Stein),
 Statue,
 Seltenes,
 Schuld,
@@ -1616,8 +1996,8 @@ Ruf,
 Rennen,
 Rätsel,
 Portal,
-Pflanze,
-Ort,
+Pflanze (➭ Pflanze),
+Ort (➭ Ort),
 Nordlichter,
 Natur,
 Name,
@@ -1628,12 +2008,10 @@ Liebe,
 Legende,
 Krankheit,
 Kompass,
-Keller,
-Instrument,
+Instrument (➭ Instrument),
 Insel,
 Identität,
 Heilmittel,
-Haus,
 Gruppe,
 Gilde,
 Gewässer,
@@ -1643,62 +2021,22 @@ Geschenk,
 Geist,
 Geheimnis,
 Geheimes,
-Gegenstand,
+Gegenstand (➭ Gegenstand),
 Gefahr,
 Freundschaft,
 Freiheit,
-Flagge,
 Fertigkeit,
 Erfindung,
 Entdeckung,
 Einzigartiges,
 Buch,
 Botschafter,
-Blume,
-Bibliothek,
 Behälter,
+Bauwerk (➭ Bauwerk),
 Auftrag,
 Artefakt,
-Archive,
+Archiv,
 Angst
-</p>
-
-<p class="liste" data-table="ziel-verb">
-verstecken,
-vereinen,
-verbessern,
-überqueren,
-tauschen,
-sprechen,
-sein,
-sammeln,
-retten,
-reparieren,
-reisen,
-nachahmen,
-kennenlernen,
-imitieren,
-herausfinden,
-heilen,
-gründen,
-gewinnen,
-folgen,
-fliehen,
-finden,
-erstellen,
-erlangen,
-erklimmen,
-erfüllen,
-entschlüsseln,
-entdecken,
-davonschwimmen,
-davonrennen,
-davonfliegen,
-beschwören,
-beschützen,
-begleichen,
-bauen,
-anlegen
 </p>
 
 <h2>Herausforderung</h2>
@@ -1818,22 +2156,19 @@ Aber eine kleine Aufgabe wartet noch
 
 <p id="essen-ausgabe" class="tabellen-ausgabe"></p>
 
+<!-- TODO Dessert, Fritiertes, Getreide ... -->
 <p class="liste" data-table="essen">
-Zwiebel,
 Zucker,
-Zucchini,
-Trauben,
 Tortilla,
-Tomate,
 Teig,
 Taco,
-Süsskartoffel,
 Suppe,
-Spinat,
 Spaghetti,
 Sorbet,
+Sojasauce,
 Senf,
 Schokolade,
+Salzgurken,
 Salat,
 Risotto,
 Reis,
@@ -1841,54 +2176,32 @@ Puderzucker,
 Pudding,
 Pommes Frites,
 Pizza,
-Pilze,
 Pesto,
-Paprika,
-Orange,
 Öl,
 Nudeln,
 Müsli,
 Mousse,
-Melone,
 Mayonnaise,
 Marzipan,
-Mango,
-Linsen,
 Kuchen,
 Krapfen,
-Knoblauch,
-Kiwi,
 Ketchup,
 Kaugummi,
-Kartoffel,
-Karotte,
 Humus,
-Himbeere,
 Haferflocken,
-Gurke,
 Gemüse-Bouillon,
 Gelee,
 Gazpacho (Kalte Suppe),
 Frühlingsrollen,
 Falafel,
 Fajita,
-Erdbeere,
 Eiscreme,
 Dauerlutscher (Schleckstängel),
 Curry,
 Creme,
 Burrito,
 Brot,
-Brombeere,
-Brokkoli,
-Bonbon,
-Blumenkohl,
-Blaubeere,
-Banane,
-Avocado,
-Aubergine,
-Apfel,
-Ananas
+Bonbon
 </p>
 
 <h2>Getränk</h2>
@@ -1897,15 +2210,16 @@ Ananas
 
 <p id="getraenk-ausgabe" class="tabellen-ausgabe"></p>
 
+<!-- TODO Mate, Kaffee, Schokoldade, ...-->
 <p class="liste" data-table="getraenk">
+Wasser,
 Tee,
 Smoothie,
 Sirup,
-Quellwasser,
-Mate,
-Kaffee,
+Schorle,
+Saft,
+Limonade,
 Hafer-Milch,
-Fruchtsaft,
 Eistee,
 Brause
 </p>
@@ -1915,6 +2229,24 @@ Brause
 <button id="farbe-generieren">Würfeln 🎲</button>
 
 <p id="farbe-ausgabe" class="tabellen-ausgabe"></p>
+
+<p class="liste" data-table="farbe-nuance">
+Zart,
+Tief,
+Seidig,
+Schimmernd,
+Sanft,
+Matt,
+Leuchtend,
+Kräftig,
+Irisierend,
+Hell,
+Glänzend,
+Feurig,
+Eisig,
+Dunkel,
+Blass
+</p>
 
 <p class="liste" data-table="farbe">
 Weiss,
@@ -1926,12 +2258,10 @@ Regenbogen,
 Pink,
 Orange,
 Lila,
-Hell,
 Grün,
 Grau,
 Gelb,
 Durchsichtig,
-Dunkel,
 Bunt,
 Braun,
 Blau
