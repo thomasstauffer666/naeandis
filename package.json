@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
-    "jsdom": "26.1"
+    "jsdom": "26.1",
+    "koffi": "2.15"
   }
 }
